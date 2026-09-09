@@ -1,0 +1,55 @@
+<div class="auth-container">
+  <div class="auth-left">
+    <div class="auth-left-logo">
+      <span class="logo-emoji">🎮</span>
+      <span class="logo-name">MathGo</span>
+    </div>
+    <div class="auth-left-title">¡Bienvenido,<br>campeón! 👦</div>
+    <p class="auth-left-sub">Crea tu cuenta y empieza<br>a aprender matemáticas</p>
+    <button class="auth-left-btn" routerLink="/login">Ya tengo cuenta →</button>
+  </div>
+  <div class="auth-right">
+    <div class="auth-card">
+      <h2 class="auth-title">Crear cuenta</h2>
+
+      <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+      <div *ngIf="exito" class="alert alert-success">{{ exito }}</div>
+
+      <form (ngSubmit)="registrar()" #regForm="ngForm">
+        <div class="form-group">
+          <label for="nombre">👤 Nombre completo</label>
+          <input id="nombre" type="text" [(ngModel)]="nombre" name="nombre"
+                 placeholder="Tu nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label for="correo">📧 Correo electrónico</label>
+          <input id="correo" type="email" [(ngModel)]="correo" name="correo"
+                 placeholder="tu@correo.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">🔒 Contraseña</label>
+          <input id="password" type="password" [(ngModel)]="password" name="password"
+                 placeholder="Mínimo 6 caracteres" required />
+        </div>
+
+        <div class="form-group">
+          <label for="rol">🎭 Soy...</label>
+          <select id="rol" [(ngModel)]="rol" name="rol">
+            <option value="ALUMNO">👦 Alumno (niño)</option>
+            <option value="PADRE">👨 Padre / Madre</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary" [class.btn-padre]="rol === 'PADRE'" [disabled]="cargando">
+          {{ cargando ? 'Creando cuenta...' : '¡Crear cuenta!' }}
+        </button>
+      </form>
+
+      <p class="link-text">
+        ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+      </p>
+    </div>
+  </div>
+</div>

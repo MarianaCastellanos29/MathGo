@@ -1,0 +1,74 @@
+<div class="logros-container">
+
+  <div class="particles-bg">
+    <span *ngFor="let e of ['🏅','⭐','🔥','🏆','💫','🎯']" class="particle-l"
+          [style.left.%]="('🏅⭐🔥🏆💫🎯'.indexOf(e)) * 17 + 2"
+          [style.animationDelay]="('🏅⭐🔥🏆💫🎯'.indexOf(e) * 1.4) + 's'">{{e}}</span>
+  </div>
+
+  <div class="header">
+    <a routerLink="/home" class="btn-back">← Volver</a>
+    <h1>🏅 Mis Logros</h1>
+  </div>
+
+  <!-- Stats del jugador -->
+  <div class="stats-card">
+    <div class="stat">
+      <span class="stat-icon">{{ rangoEmoji }}</span>
+      <span class="stat-label">Rango</span>
+      <span class="stat-value">{{ rango }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">⭐</span>
+      <span class="stat-label">XP Total</span>
+      <span class="stat-value">{{ xp }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">🔥</span>
+      <span class="stat-label">Racha actual</span>
+      <span class="stat-value">{{ rachaActual }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">🏅</span>
+      <span class="stat-label">Logros</span>
+      <span class="stat-value">{{ logrosObtenidos.length }}/{{ todosLosLogros.length }}</span>
+    </div>
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="progreso-logros">
+    <div class="progreso-label">Progreso: {{ logrosObtenidos.length }} de {{ todosLosLogros.length }} logros</div>
+    <div class="progreso-barra">
+      <div class="progreso-fill" [style.width.%]="porcentajeProgreso"></div>
+    </div>
+  </div>
+
+  <!-- Todos los logros -->
+  <div class="logros-grid">
+    <div *ngFor="let logro of todosLosLogros"
+         class="logro-card"
+         [class.obtenido]="estaObtenido(logro.id)"
+         [class.bloqueado]="!estaObtenido(logro.id)">
+
+      <div class="logro-icono-wrap">
+        <span class="logro-icono" [class.gris]="!estaObtenido(logro.id)">{{ logro.icono }}</span>
+        <div class="logro-brillo" *ngIf="estaObtenido(logro.id)"></div>
+        <span class="candado" *ngIf="!estaObtenido(logro.id)">🔒</span>
+      </div>
+
+      <div class="logro-info">
+        <<h3>{{ logro.nombre }}</h3>
+        <p>{{ logro.descripcion }}</p>
+        <small *ngIf="estaObtenido(logro.id)" class="fecha-obtenido">
+          🗓️ {{ fechaObtenido(logro.id) | date:'dd/MM/yyyy' }}
+        </small>
+        <small *ngIf="!estaObtenido(logro.id)" class="pista">
+          💡 Sigue jugando para desbloquear
+        </small>
+      </div>
+
+      <div class="logro-check" *ngIf="estaObtenido(logro.id)">✅</div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mathgo-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Mariana02
+      MYSQL_DATABASE: mathgo_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mathgo-mysql-data:/var/lib/mysql
+
+  backend:
+    build: ./mathgo-backend
+    container_name: mathgo-backend
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/mathgo_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      DB_USER: root
+      DB_PASSWORD: Mariana02
+      JWT_SECRET: mathgo-super-secret-key-2024-min32chars!!!
+      JWT_EXPIRATION: 86400000
+    depends_on:
+      - mysql
+
+  frontend:
+    build: ./mathgo-frontend
+    container_name: mathgo-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: mathgo-sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+volumes:
+  mathgo-mysql-data:
+  sonarqube_data:
+  sonarqube_logs:
+  sonarqube_extensions:

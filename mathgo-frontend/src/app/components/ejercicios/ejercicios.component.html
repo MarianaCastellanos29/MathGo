@@ -1,0 +1,147 @@
+<div class="ejercicio-container">
+
+  <div class="particles">
+    <span *ngFor="let p of particulas" class="particle"
+          [style.left.%]="p.x"
+          [style.animationDelay]="p.delay"
+          [style.fontSize]="p.size">{{ p.emoji }}</span>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="ejercicios.length === 0 && !finNivel && !sinVidas" class="fin-screen">
+    <div class="dragon dragon-idle">🐉</div>
+    <h2>Pyro está preparando los ejercicios...</h2>
+  </div>
+
+  <!-- Sin vidas -->
+  <div *ngIf="sinVidas" class="fin-screen">
+    <div class="dragon dragon-sad">🐲</div>
+    <h2>¡Sin vidas!</h2>
+    <p>Pyro está triste... Ve a la tienda para comprar más ❤️</p>
+    <div class="fin-botones">
+      <button class="btn-home" (click)="irHome()">🏠 Inicio</button>
+    </div>
+  </div>
+
+  <!-- Nivel completado -->
+  <div *ngIf="finNivel && !sinVidas" class="fin-screen fin-completado">
+    <div class="dragon dragon-happy">🐉</div>
+
+    <div class="estrellas-fin">
+      <span [class.estrella-on]="estrellas >= 1">⭐</span>
+      <span [class.estrella-on]="estrellas >= 2">⭐</span>
+      <span [class.estrella-on]="estrellas >= 3">⭐</span>
+    </div>
+
+    <h2>¡{{ nombreNivel }} completado!</h2>
+
+    <!-- Mensaje de Pyro generado por Claude -->
+    <p class="pyro-mensaje-final" *ngIf="mensajePyroFinal">{{ mensajePyroFinal }}</p>
+    <p class="subtitulo-fin" *ngIf="!mensajePyroFinal">🔥 Pyro está muy orgulloso de ti</p>
+
+    <div class="resumen-stats">
+      <div class="resumen-stat">
+        <span class="resumen-icon">✅</span>
+        <span class="resumen-num">{{ puntaje }}/{{ ejercicios.length }}</span>
+        <span class="resumen-label">Correctas</span>
+      </div>
+      <div class="resumen-stat">
+        <span class="resumen-icon">🪙</span>
+        <span class="resumen-num">+{{ monedasGanadas }}</span>
+        <span class="resumen-label">Monedas</span>
+      </div>
+      <div class="resumen-stat">
+        <span class="resumen-icon">❤️</span>
+        <span class="resumen-num">{{ vidas }}/5</span>
+        <span class="resumen-label">Vidas</span>
+      </div>
+    </div>
+
+    <!-- Datos curiosos recolectados durante el nivel -->
+    <div class="datos-curiosos-fin" *ngIf="datosCuriososNivel.length > 0">
+      <h3>💡 ¿Sabías que...?</h3>
+      <div class="dato-card" *ngFor="let dato of datosCuriososNivel">{{ dato }}</div>
+    </div>
+
+    <div class="fin-botones">
+      <button class="btn-siguiente-nivel" *ngIf="hayNivelSiguiente" (click)="irSiguienteNivel()">
+        ⚡ Siguiente nivel
+      </button>
+      <button class="btn-home" (click)="irHome()">🏠 Volver al inicio</button>
+    </div>
+  </div>
+
+  <!-- Juego activo -->
+  <ng-container *ngIf="!finNivel && !sinVidas && ejercicios.length > 0">
+    <div class="ejercicio-header">
+      <button class="btn-back" (click)="irHome()">✕</button>
+      <div class="barra-progreso">
+        <div class="barra-fill" [style.width.%]="progreso"></div>
+      </div>
+      <span class="vidas-display">{{ corazones }}</span>
+    </div>
+
+    <div class="ejercicio-body">
+      <div class="nivel-tag">Nivel {{ nivel }} — {{ nombreNivel }} • {{ indiceActual + 1 }}/{{ ejercicios.length }}</div>
+
+      <div class="dragon-pregunta-row">
+        <div class="dragon-lateral"
+             [class.dragon-correcto]="esCorrecta === true"
+             [class.dragon-incorrecto]="esCorrecta === false">
+          🐉
+          <div class="dragon-burbuja" *ngIf="!respuestaSeleccionada">¡Tú puedes!</div>
+          <div class="dragon-burbuja correcto"   *ngIf="esCorrecta === true">¡Fuego! 🔥</div>
+          <div class="dragon-burbuja incorrecto" *ngIf="esCorrecta === false">¡Ánimo! 💪</div>
+        </div>
+        <h2 class="pregunta">{{ ejercicioActual.pregunta }}</h2>
+      </div>
+
+      <div class="explosion" *ngIf="mostrarExplosion">
+        <span *ngFor="let e of explosionItems" class="explosion-item"
+              [style]="{'--transform': e.transform, 'animation-delay': e.delay}">⭐</span>
+      </div>
+
+      <div class="opciones">
+        <button *ngFor="let op of ejercicioActual.opciones"
+                class="opcion-btn"
+                [class.seleccionada]="respuestaSeleccionada === op"
+                [class.correcta]="respuestaSeleccionada && op === ejercicioActual.respuestaCorrecta"
+                [class.incorrecta]="respuestaSeleccionada === op && !esCorrecta"
+                [disabled]="!!respuestaSeleccionada"
+                (click)="seleccionar(op)">
+          {{ op }}
+        </button>
+      </div>
+
+      <!-- Feedback -->
+      <div *ngIf="respuestaSeleccionada" class="feedback"
+           [class.correcto]="esCorrecta"
+           [class.incorrecto]="!esCorrecta">
+        <p>{{ mensajeFeedback }}</p>
+
+        <!-- Dato curioso cuando acierta -->
+        <div *ngIf="esCorrecta && cargandoDato" class="cargando-claude">
+          <span class="spinner">⏳</span> Pyro está buscando algo interesante...
+        </div>
+        <p *ngIf="esCorrecta && datoCurioso && !cargandoDato" class="dato-curioso">
+          💡 {{ datoCurioso }}
+        </p>
+
+        <!-- Explicación del error cuando falla -->
+        <div *ngIf="!esCorrecta && cargandoExplicacion" class="cargando-claude">
+          <span class="spinner">🐉</span> Pyro está pensando cómo explicarte...
+        </div>
+        <p *ngIf="!esCorrecta && explicacionError && !cargandoExplicacion" class="explicacion-error">
+          🐉 {{ explicacionError }}
+        </p>
+
+        <button class="btn-siguiente"
+                [disabled]="cargandoDato || cargandoExplicacion"
+                (click)="siguiente()">
+          {{ cargandoDato || cargandoExplicacion ? '⏳ Espera...' : indiceActual + 1 >= ejercicios.length ? '🏁 Terminar' : 'Siguiente →' }}
+        </button>
+      </div>
+
+    </div>
+  </ng-container>
+</div>
