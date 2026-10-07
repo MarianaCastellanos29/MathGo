@@ -22,6 +22,8 @@ export interface LoginResponse {
   rachaActual?: number;
   xp?: number;
   rango?: string;
+  avatar?: string;
+  itemsComprados?: string;
 }
 
 export interface Ejercicio {

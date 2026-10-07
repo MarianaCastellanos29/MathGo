@@ -1,0 +1,98 @@
+<div class="mg-page">
+  <app-scene></app-scene>
+  <app-nav></app-nav>
+
+  <main class="mg-main cr-main">
+    <div class="mg-title cr-title">
+      <a routerLink="/juegos" class="mg-pill volver">← Juegos</a>
+      <h1>🐉 Carrera del dragón</h1>
+    </div>
+
+    <!-- Selección de dificultad -->
+    <section *ngIf="!dificultad" class="cr-select">
+      <div class="mg-card cr-instrucciones">
+        <img src="assets/img/pyro.png" alt="" class="cr-pyro-intro" />
+        <div>
+          <h2>🎯 ¿Cómo se juega?</h2>
+          <div class="cr-pasos">
+            <div class="cr-paso"><span class="num">1</span><span class="icono">🧮</span><p>Responde la operación antes de que se acabe el tiempo</p></div>
+            <div class="cr-paso"><span class="num">2</span><span class="icono">🐉</span><p>Si aciertas, Pyro salta y avanza en la pista</p></div>
+            <div class="cr-paso"><span class="num">3</span><span class="icono">🏁</span><p>Si fallas, retrocede un poco. ¡Llega a la meta a tiempo!</p></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="cr-pregunta">¿Con qué dificultad quieres correr?</h2>
+      <div class="cr-niveles-dif">
+        <button class="mg-card cr-dif facil" (click)="elegirDificultad('facil')">
+          <span class="emoji">🌱</span><strong>Fácil</strong><span>60 segundos · sumas y restas</span>
+        </button>
+        <button class="mg-card cr-dif medio" (click)="elegirDificultad('medio')">
+          <span class="emoji">⭐</span><strong>Medio</strong><span>75 segundos · con multiplicación</span>
+        </button>
+        <button class="mg-card cr-dif dificil" (click)="elegirDificultad('dificil')">
+          <span class="emoji">🔥</span><strong>Difícil</strong><span>55 segundos · con división</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Carrera en curso -->
+    <section *ngIf="dificultad && estado === 'jugando'" class="cr-juego">
+      <div class="mg-card cr-marcador">
+        <span [class.urgente]="tiempoRestante <= 10">⏱ {{ tiempoRestante }}s</span>
+        <span>✅ {{ correctas }}</span>
+        <span>❌ {{ incorrectas }}</span>
+        <button class="mg-pill" (click)="reiniciar()">↻ Cambiar dificultad</button>
+      </div>
+
+      <div class="cr-pista">
+        <span class="cr-nube n1">☁️</span><span class="cr-nube n2">☁️</span>
+        <span class="cr-estrella e1">✨</span><span class="cr-estrella e2">⭐</span><span class="cr-estrella e3">✨</span>
+        <div class="cr-meta">🏁</div>
+        <img src="assets/img/pyro.png" alt="" class="cr-corredor"
+             [style.left.%]="progreso" [class.salta]="dragonSaltando" [class.tropieza]="dragonTropieza" />
+        <div class="cr-linea"></div>
+      </div>
+      <div class="cr-porcentaje">{{ progreso }}% del camino</div>
+
+      <div class="mg-card cr-pregunta-caja" *ngIf="pregunta">
+        <span class="cr-pregunta-txt">{{ pregunta.texto }} = ?</span>
+        <div class="cr-opciones">
+          <button
+            *ngFor="let op of opciones"
+            class="cr-opcion"
+            [disabled]="!!respuestaSeleccionada"
+            [class.correcta]="respuestaSeleccionada && op === respuestaSeleccionada && esCorrecta"
+            [class.incorrecta]="respuestaSeleccionada && op === respuestaSeleccionada && !esCorrecta"
+            (click)="responder(op)">
+            {{ op }}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Victoria -->
+    <section *ngIf="estado === 'ganado'" class="mg-card cr-final ganado">
+      <span class="cr-emoji-final">🏆</span>
+      <h2>¡Llegaste a la meta!</h2>
+      <p>{{ correctas }} correctas · {{ incorrectas }} fallidas</p>
+      <div class="cr-acciones">
+        <button class="mg-btn" (click)="iniciarCarrera()">🔁 Correr de nuevo</button>
+        <button class="mg-btn ghost" (click)="reiniciar()">🎚 Cambiar dificultad</button>
+        <a routerLink="/juegos" class="mg-btn ghost">🎲 Otros juegos</a>
+      </div>
+    </section>
+
+    <!-- Tiempo agotado -->
+    <section *ngIf="estado === 'tiempo-agotado'" class="mg-card cr-final">
+      <span class="cr-emoji-final">⏰</span>
+      <h2>¡Se acabó el tiempo!</h2>
+      <p>Llegaste al {{ progreso }}% del camino. ¡Casi lo logras!</p>
+      <div class="cr-acciones">
+        <button class="mg-btn" (click)="iniciarCarrera()">🔁 Intentar de nuevo</button>
+        <button class="mg-btn ghost" (click)="reiniciar()">🎚 Cambiar dificultad</button>
+        <a routerLink="/juegos" class="mg-btn ghost">🎲 Otros juegos</a>
+      </div>
+    </section>
+  </main>
+</div>

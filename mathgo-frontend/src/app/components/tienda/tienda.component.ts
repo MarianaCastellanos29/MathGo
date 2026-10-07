@@ -4,10 +4,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TiendaService, ItemTienda } from '../../services/tienda.service';
 
+import { NavComponent } from '../../shared/nav/nav.component';
+import { SceneComponent } from '../../shared/scene/scene.component';
+import { HeartsComponent } from '../../shared/hearts/hearts.component';
+
 @Component({
   selector: 'app-tienda',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NavComponent, HeartsComponent, SceneComponent],
   templateUrl: './tienda.component.html',
   styleUrls: ['./tienda.component.scss']
 })
@@ -56,7 +60,7 @@ export class TiendaComponent implements OnInit {
   }
 
   usar(item: ItemTienda): void {
-    this.auth.setAvatar(item.estilo);
+    this.auth.setAvatarActivo(item.estilo);
     this.avatarActual = item.estilo;
     this.mensaje = `¡Usando ${item.nombre}!`;
     this.mensajeOk = true;
@@ -76,8 +80,7 @@ export class TiendaComponent implements OnInit {
       this.mostrarToast();
       return;
     }
-    this.auth.setXp(this.xp - this.PRECIO_VIDA);
-    this.auth.setVidas(this.vidas + 1);
+    this.auth.guardarProgreso({ xp: this.xp - this.PRECIO_VIDA, vidas: this.vidas + 1 }).subscribe();
     this.xp = this.auth.getXp();
     this.vidas = this.auth.getVidas();
     this.mensaje = `❤️ ¡Vida restaurada! Te quedan ${this.vidas} vidas`;

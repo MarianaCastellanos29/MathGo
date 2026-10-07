@@ -1,84 +1,76 @@
-<div class="home-container">
+<div class="mg-page home">
+  <app-scene></app-scene>
+  <app-nav></app-nav>
 
-  <div class="particles-bg">
-    <span *ngFor="let p of particulas" class="particle-bg"
-          [style.left.%]="p.x"
-          [style.animationDelay]="p.delay"
-          [style.animationDuration]="p.duration"
-          [style.fontSize]="p.size">{{ p.emoji }}</span>
-  </div>
-
-  <header class="home-header">
-    <div class="logo-small">🎮 MathGo</div>
-    <div class="user-info">
-      <span class="monedas-header">🪙 {{ xp }}</span>
-      <span class="vidas">{{ corazones }}</span>
-      <button class="avatar-btn" (click)="irPerfil()" title="Cambiar avatar" aria-label="Cambiar avatar">
-        <img [src]="avatarUrl" class="avatar" [alt]="nombre" />
-      </button>
-      <span class="nombre">{{ nombre }}</span>
-      <button class="btn-logout" (click)="logout()">Salir</button>
-    </div>
-  </header>
-
-  <main class="home-main">
-
-    <div class="mascota-section">
-      <div class="pyro-container">
-        <div class="pyro-dragon">🐉</div>
-        <div class="pyro-burbuja">¡Hola, {{ nombre }}! ¿Listo para practicar? 🔥</div>
-        <div class="pyro-sombra"></div>
+  <main class="mg-main">
+    <section class="hero">
+      <div class="saludo">
+        <h1>¡Hola, <em>{{ nombre }}</em>!</h1>
+        <p class="pregunta">¿Listo para practicar? 🔥</p>
+        <div class="mg-card frase">Las matemáticas también son una gran aventura. ✨</div>
       </div>
-    </div>
 
-    <h2>🎮 Selecciona un nivel</h2>
-    <p class="subtitle">Completa cada nivel para desbloquear el siguiente</p>
+      <div class="mascota" aria-hidden="true">
+        <img class="signo s1" src="assets/img/plus.png" alt="" />
+        <img class="signo s2" src="assets/img/star.png" alt="" />
+        <img class="signo s3" src="assets/img/divide.png" alt="" />
+        <img class="signo s4" src="assets/img/tres.png" alt="" />
+        <app-pyro class="pyro-grande" mood="happy"></app-pyro>
+        <div class="roca"></div>
+      </div>
 
-    <div class="niveles-grid">
-      <button *ngFor="let nv of niveles; let i = index"
-           class="nivel-card"
-           [class.actual]="nv.id <= nivelActual"
-           [class.bloqueado]="nv.id > nivelActual"
-           [style.animationDelay]="(i * 0.12) + 's'"
-           [style.--nivel-color]="nv.color"
-           (click)="seleccionarNivel(nv.id)"
-           [attr.aria-label]="nv.nombre + ' - ' + nv.descripcion">
-        <div class="nivel-emoji-wrap">
-          <span class="nivel-emoji">{{ nv.emoji }}</span>
-          <div class="nivel-brillo" *ngIf="nv.id <= nivelActual"></div>
+      <aside class="paneles">
+        <a routerLink="/progreso" class="mg-card panel progreso-card">
+          <h2>📊 Tu progreso general <span class="flecha">›</span></h2>
+          <div class="progreso-fila">
+            <div class="anillo" [style.--p]="progresoGeneral + '%'"><b>{{ progresoGeneral }}%</b></div>
+            <div class="progreso-txt">
+              <strong>Nivel {{ nivelActual }}</strong>
+              <small>{{ mensajeProgreso }}</small>
+              <div class="mg-bar"><i [style.width.%]="progresoGeneral"></i></div>
+            </div>
+          </div>
+        </a>
+        <div class="mg-card panel">
+          <h2><app-hearts [vidas]="1" [max]="1"></app-hearts> Tus vidas</h2>
+          <div class="vidas-fila">
+            <app-hearts class="vidas-grandes" [vidas]="vidas"></app-hearts>
+            <a routerLink="/tienda" class="mg-pill recargar">↻ Recargar vidas</a>
+          </div>
         </div>
-        <h3>{{ nv.nombre }}</h3>
-        <p>{{ nv.descripcion }}</p>
-        <span class="nivel-badge"
-              [class.badge-ok]="nv.id <= nivelActual"
-              [class.badge-lock]="nv.id > nivelActual">
-          {{ nv.id < nivelActual ? '✅ Completado' : nv.id === nivelActual ? '▶️ Jugar' : '🔒 Bloqueado' }}
-        </span>
-      </button>
-    </div>
+      </aside>
+    </section>
 
-    <div class="accesos-rapidos">
-      <a routerLink="/progreso" class="acceso-card progreso">
-        <span class="acceso-icon">📊</span>
-        <span class="acceso-label">Mi Progreso</span>
-      </a>
-      <a routerLink="/logros" class="acceso-card logros">
-        <span class="acceso-icon">🏅</span>
-        <span class="acceso-label">Mis Logros</span>
-      </a>
-      <a routerLink="/historial" class="acceso-card historial">
-        <span class="acceso-icon">📋</span>
-        <span class="acceso-label">Mi Historial</span>
-      </a>
-      <a routerLink="/tienda" class="acceso-card tienda">
-        <span class="acceso-icon">🏪</span>
-        <span class="acceso-label">Tienda</span>
-      </a>
-      <a routerLink="/padre" class="acceso-card padre" *ngIf="rol === 'PADRE'">
-        <span class="acceso-icon">👨‍👩‍👧</span>
-        <span class="acceso-label">Panel Padre</span>
-      </a>
-    </div>
+    <section class="niveles">
+      <h2>🎮 Selecciona un nivel</h2>
+      <p class="sub">Completa cada nivel para desbloquear el siguiente</p>
 
+      <div class="niveles-grid">
+        <button *ngFor="let nv of niveles"
+                class="nivel"
+                [class.actual]="nv.id === nivelActual"
+                [class.hecho]="nv.id < nivelActual"
+                [class.bloqueado]="nv.id > nivelActual"
+                (click)="seleccionarNivel(nv.id)"
+                [attr.aria-label]="nv.nombre + ' - ' + nv.descripcion">
+          <img *ngIf="nv.img" class="emoji-img" [src]="nv.img" alt="" />
+          <span class="emoji" *ngIf="!nv.img">{{ nv.emoji }}</span>
+          <h3>{{ nv.nombre }}</h3>
+          <p>{{ nv.descripcion }}</p>
+          <span class="estado">
+            {{ nv.id < nivelActual ? '✓ Repetir' : nv.id === nivelActual ? '▶ Jugar' : '🔒 Bloqueado' }}
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <nav class="accesos" aria-label="Más secciones">
+      <a routerLink="/juegos" class="mg-pill">🎲 Juegos</a>
+      <a routerLink="/apoyo" class="mg-pill">📚 Apoyo</a>
+      <a routerLink="/logros" class="mg-pill">🏅 Mis logros</a>
+      <a routerLink="/historial" class="mg-pill">📋 Mi historial</a>
+      <a routerLink="/tienda" class="mg-pill">🏪 Tienda</a>
+      <a routerLink="/padre" class="mg-pill" *ngIf="rol === 'PADRE'">👨‍👩‍👧 Panel Padre</a>
+    </nav>
   </main>
 </div>

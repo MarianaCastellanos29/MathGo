@@ -1,0 +1,83 @@
+<div class="mg-page">
+  <app-scene></app-scene>
+  <app-nav></app-nav>
+
+  <main class="mg-main mm-main">
+    <div class="mg-title mm-title">
+      <a routerLink="/juegos" class="mg-pill volver">← Juegos</a>
+      <h1>🃏 Memorama matemático</h1>
+    </div>
+
+    <!-- Selección de dificultad -->
+    <section *ngIf="!dificultad" class="mm-select">
+      <div class="mg-card mm-instrucciones">
+        <app-pyro class="mm-pyro" mood="happy"></app-pyro>
+        <div>
+          <h2>🎯 ¿Cómo se juega?</h2>
+          <div class="mm-pasos">
+            <div class="mm-paso"><span class="num">1</span><span class="icono">👆</span><p>Toca una carta para voltearla</p></div>
+            <div class="mm-paso"><span class="num">2</span><span class="icono">🔢</span><p>Busca su pareja: la operación y su resultado</p></div>
+            <div class="mm-paso"><span class="num">3</span><span class="icono">🏆</span><p>Si aciertas se quedan destapadas. ¡Encuentra todas!</p></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="mm-pregunta">¿Con qué dificultad quieres jugar?</h2>
+      <div class="mm-niveles-dif">
+        <button class="mg-card mm-dif facil" (click)="elegirDificultad('facil')">
+          <span class="emoji">🌱</span><strong>Fácil</strong><span>4 parejas · sumas y restas</span>
+        </button>
+        <button class="mg-card mm-dif medio" (click)="elegirDificultad('medio')">
+          <span class="emoji">⭐</span><strong>Medio</strong><span>6 parejas · con multiplicación</span>
+        </button>
+        <button class="mg-card mm-dif dificil" (click)="elegirDificultad('dificil')">
+          <span class="emoji">🔥</span><strong>Difícil</strong><span>8 parejas · con división</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Tablero -->
+    <section *ngIf="dificultad && !juegoTerminado" class="mm-tablero-zona">
+      <div class="mg-card mm-marcador">
+        <span>⏱ {{ tiempoFormateado }}</span>
+        <span>🔁 {{ movimientos }} movimientos</span>
+        <span>✅ {{ aciertos }} / {{ totalParejas }}</span>
+        <button class="mg-pill" (click)="reiniciar()">↻ Cambiar dificultad</button>
+      </div>
+
+      <div class="mm-zona-juego">
+        <app-pyro class="mm-pyro-lateral izq" mood="happy"></app-pyro>
+
+        <div class="mm-tablero" [class.dificil]="dificultad === 'dificil'">
+          <span class="mm-decor d1">✨</span><span class="mm-decor d2">⭐</span>
+          <span class="mm-decor d3">✨</span><span class="mm-decor d4">💫</span>
+          <button
+            *ngFor="let c of cartas"
+            class="mm-carta"
+            [class.volteada]="c.volteada || c.resuelta"
+            [class.resuelta]="c.resuelta"
+            [class.error]="c.error"
+            (click)="voltear(c)">
+            <span class="cara reverso">?</span>
+            <span class="cara frente" [class.operacion]="c.tipo === 'operacion'">{{ c.texto }}</span>
+          </button>
+        </div>
+
+        <app-pyro class="mm-pyro-lateral der" mood="idle"></app-pyro>
+      </div>
+    </section>
+
+    <!-- Victoria -->
+    <section *ngIf="juegoTerminado" class="mg-card mm-victoria">
+      <app-pyro class="mm-pyro" mood="happy"></app-pyro>
+      <span class="mm-trofeo">🏆</span>
+      <h2>¡Muy bien! Completaste el memorama</h2>
+      <p>{{ movimientos }} movimientos · {{ tiempoFormateado }} minutos</p>
+      <div class="mm-acciones">
+        <button class="mg-btn" (click)="iniciarPartida()">🔁 Jugar de nuevo</button>
+        <button class="mg-btn ghost" (click)="reiniciar()">🎚 Cambiar dificultad</button>
+        <a routerLink="/juegos" class="mg-btn ghost">🎲 Otros juegos</a>
+      </div>
+    </section>
+  </main>
+</div>

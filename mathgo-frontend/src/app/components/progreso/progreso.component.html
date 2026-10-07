@@ -1,52 +1,30 @@
-<div class="progreso-container">
-  <header class="home-header">
-    <div class="logo-small">🎮 MathGo</div>
-    <div class="user-info">
-      <span class="vidas">{{ corazones }}</span>
-      <span class="nombre">{{ nombre }}</span>
-    </div>
-  </header>
-
-  <main class="progreso-main">
-    <button class="btn-back-text" (click)="irHome()">← Volver al inicio</button>
-    <h2>📊 Mi Progreso</h2>
-    <p class="subtitle">Tu historial de ejercicios y precisión</p>
-
-    <div class="stats-grid" *ngIf="progreso">
-      <div class="stat-card">
-        <span class="stat-emoji">📝</span>
-        <span class="stat-numero">{{ progreso.total }}</span>
-        <span class="stat-label">Ejercicios resueltos</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-emoji">✅</span>
-        <span class="stat-numero">{{ progreso.correctos }}</span>
-        <span class="stat-label">Respuestas correctas</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-emoji">🎯</span>
-        <span class="stat-numero">{{ progreso.porcentaje }}%</span>
-        <span class="stat-label">Porcentaje de aciertos</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-emoji">⭐</span>
-        <span class="stat-numero">{{ nivelActual }}</span>
-        <span class="stat-label">Nivel actual</span>
-      </div>
+<div class="mg-page">
+  <app-scene></app-scene>
+  <app-nav></app-nav>
+  <main class="mg-main">
+    <div class="mg-title">
+      <h1>📊 Mi progreso</h1>
+      <p>Tu historial de ejercicios y precisión</p>
     </div>
 
-    <div class="barra-container" *ngIf="progreso">
-      <label>Precisión general</label>
-      <div class="barra-grande">
-        <div class="barra-grande-fill" [style.width.%]="progreso.porcentaje"
+    <ng-container *ngIf="progreso; else cargandoP">
+      <div class="mg-stats">
+        <div class="mg-card mg-stat sky"><span class="ico"><img class="mg-ico" src="assets/img/bars.png" alt="" /></span><strong>{{ progreso.total }}</strong><span class="lbl">Ejercicios resueltos</span></div>
+        <div class="mg-card mg-stat"><span class="ico"><img class="mg-ico" src="assets/img/check.png" alt="" /></span><strong>{{ progreso.correctos }}</strong><span class="lbl">Respuestas correctas</span></div>
+        <div class="mg-card mg-stat pink"><span class="ico"><img class="mg-ico" src="assets/img/target.png" alt="" /></span><strong>{{ progreso.porcentaje }}%</strong><span class="lbl">Porcentaje de aciertos</span></div>
+        <div class="mg-card mg-stat gold"><span class="ico"><img class="mg-ico" src="assets/img/star.png" alt="" /></span><strong>{{ nivelActual }}</strong><span class="lbl">Nivel actual</span></div>
+      </div>
+
+      <div class="mg-card precision">
+        <h2>Precisión general</h2>
+        <div class="mg-bar"><i [style.width.%]="progreso.porcentaje"
              [class.baja]="progreso.porcentaje < 50"
-             [class.media]="progreso.porcentaje >= 50 && progreso.porcentaje < 80"
-             [class.alta]="progreso.porcentaje >= 80">
-        </div>
+             [class.media]="progreso.porcentaje >= 50 && progreso.porcentaje < 80"></i></div>
+        <span class="pct">{{ progreso.porcentaje }}%</span>
       </div>
-      <span class="barra-pct">{{ progreso.porcentaje }}%</span>
-    </div>
 
-    <div *ngIf="!progreso" class="cargando">⏳ Cargando tu progreso...</div>
+      <div class="mas"><a routerLink="/historial" class="mg-btn ghost">📋 Ver mi historial</a></div>
+    </ng-container>
+    <ng-template #cargandoP><div class="mg-loading">⏳ Cargando tu progreso...</div></ng-template>
   </main>
 </div>

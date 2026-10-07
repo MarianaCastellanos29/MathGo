@@ -1,50 +1,33 @@
-<div class="tienda-container">
+<div class="mg-page">
+  <app-scene></app-scene>
+  <app-nav></app-nav>
 
-  <!-- Partículas -->
-  <div class="particles-bg">
-    <span *ngFor="let e of ['💎','⭐','🪙','✨','🔥','💫']" class="particle-t"
-          [style.left.%]="(('💎⭐🪙✨🔥💫'.indexOf(e)) * 17) + 2"
-          [style.animationDelay]="('💎⭐🪙✨🔥💫'.indexOf(e) * 1.3) + 's'">{{e}}</span>
-  </div>
+  <div class="mg-toast" [class.show]="mostrarMensaje" [class.ok]="mensajeOk" [class.error]="!mensajeOk" role="status">{{ mensaje }}</div>
 
-  <!-- Header -->
-  <header class="tienda-header">
-    <button class="btn-back" (click)="irHome()">← Volver</button>
-    <h1>🏪 Tienda</h1>
-    <div class="monedas">🪙 {{ xp }} monedas</div>
-  </header>
+  <main class="mg-main">
+    <div class="mg-title">
+      <h1>🏪 Tienda</h1>
+      <p>Gasta tus monedas en vidas y avatares · <span class="mg-pill saldo"><i class="mg-coin"></i>{{ xp }} monedas</span></p>
+    </div>
 
-  <!-- Toast -->
-  <div class="toast" [class.show]="mostrarMensaje" [class.ok]="mensajeOk" [class.error]="!mensajeOk">
-    {{ mensaje }}
-  </div>
-
-  <main class="tienda-main">
-
-    <!-- PISTAS -->
     <section class="seccion">
-      <h2 class="seccion-titulo">💡 ¿Cómo ganar monedas?</h2>
-      <div class="pistas-grid">
-        <div *ngFor="let pista of pistas" class="pista-card">
-          <span class="pista-emoji">{{ pista.emoji }}</span>
-          <p>{{ pista.texto }}</p>
+      <h2>💡 ¿Cómo ganar monedas?</h2>
+      <div class="pistas">
+        <div *ngFor="let pista of pistas" class="mg-card pista">
+          <span>{{ pista.emoji }}</span><p>{{ pista.texto }}</p>
         </div>
       </div>
     </section>
 
-    <!-- RESTABLECER VIDAS -->
     <section class="seccion">
-      <h2 class="seccion-titulo">❤️ Restablecer Vidas</h2>
-      <div class="vidas-card">
-        <div class="vidas-info">
-          <div class="vidas-display">{{ corazones }}</div>
-          <p class="vidas-texto">{{ vidas }}/{{ MAX_VIDAS }} vidas disponibles</p>
-          <p class="vidas-precio">Precio: 🪙 {{ PRECIO_VIDA }} monedas por vida</p>
+      <h2>Restablecer vidas</h2>
+      <div class="mg-card vidas">
+        <div>
+          <app-hearts class="corazones" [vidas]="vidas" [max]="MAX_VIDAS"></app-hearts>
+          <p>{{ vidas }}/{{ MAX_VIDAS }} vidas disponibles</p>
+          <small>Precio: <i class="mg-coin"></i> {{ PRECIO_VIDA }} monedas por vida</small>
         </div>
-        <button class="btn-vida"
-                [class.lleno]="vidas >= MAX_VIDAS"
-                [class.sin-fondos]="xp < PRECIO_VIDA && vidas < MAX_VIDAS"
-                (click)="comprarVida()">
+        <button class="mg-btn" [class.ghost]="vidas >= MAX_VIDAS || xp < PRECIO_VIDA" (click)="comprarVida()">
           <span *ngIf="vidas >= MAX_VIDAS">✅ Vidas completas</span>
           <span *ngIf="vidas < MAX_VIDAS && xp >= PRECIO_VIDA">❤️ Comprar vida</span>
           <span *ngIf="vidas < MAX_VIDAS && xp < PRECIO_VIDA">🔒 Sin monedas</span>
@@ -52,46 +35,29 @@
       </div>
     </section>
 
-    <!-- AVATARES -->
     <section class="seccion">
-      <h2 class="seccion-titulo">🎨 Avatares</h2>
-      <p class="subtitulo">Desbloquea nuevos estilos para tu personaje</p>
-
-      <div class="items-grid">
-        <div *ngFor="let item of items"
-             class="item-card"
-             [class.comprado]="tienda.estaComprado(item.id)"
-             [class.activo]="avatarActual === item.estilo">
-
-          <div class="item-emoji">{{ item.emoji }}</div>
-          <img [src]="getPreview(item.estilo)" [alt]="item.nombre" class="item-avatar" />
-          <h3>{{ item.nombre }}</h3>
+      <h2>🎨 Avatares</h2>
+      <p class="sub">Desbloquea nuevos estilos para tu personaje</p>
+      <div class="items">
+        <div *ngFor="let item of items" class="mg-card item"
+             [class.comprado]="tienda.estaComprado(item.id)" [class.activo]="avatarActual === item.estilo">
+          <img [src]="getPreview(item.estilo)" [alt]="item.nombre" class="foto" />
+          <h3>{{ item.emoji }} {{ item.nombre }}</h3>
           <p>{{ item.descripcion }}</p>
 
-          <div class="item-precio" *ngIf="!tienda.estaComprado(item.id)">
-            🪙 {{ item.precio === 0 ? 'Gratis' : item.precio + ' monedas' }}
-          </div>
+          <div class="precio" *ngIf="!tienda.estaComprado(item.id)"><i class="mg-coin"></i>{{ item.precio === 0 ? 'Gratis' : item.precio + ' monedas' }}</div>
 
-          <div class="item-acciones">
-            <button *ngIf="!tienda.estaComprado(item.id)"
-                    class="btn-comprar"
-                    [class.sin-fondos]="xp < item.precio"
-                    (click)="comprar(item)">
-              {{ xp >= item.precio ? '🛒 Comprar' : '🔒 Sin monedas' }}
+          <button *ngIf="!tienda.estaComprado(item.id)" class="mg-btn" [class.ghost]="xp < item.precio" (click)="comprar(item)">
+            {{ xp >= item.precio ? '🛒 Comprar' : '🔒 Sin monedas' }}
+          </button>
+          <div *ngIf="tienda.estaComprado(item.id)" class="comprado-fila">
+            <span class="mg-pill">✅ Comprado</span>
+            <button class="mg-btn" [class.ghost]="avatarActual === item.estilo" (click)="usar(item)">
+              {{ avatarActual === item.estilo ? '✔ En uso' : 'Usar' }}
             </button>
-
-            <div *ngIf="tienda.estaComprado(item.id)" class="comprado-acciones">
-              <span class="badge-comprado">✅ Comprado</span>
-              <button class="btn-usar"
-                      [class.activo]="avatarActual === item.estilo"
-                      (click)="usar(item)">
-                {{ avatarActual === item.estilo ? '✔ En uso' : 'Usar' }}
-              </button>
-            </div>
           </div>
         </div>
       </div>
     </section>
-
   </main>
 </div>

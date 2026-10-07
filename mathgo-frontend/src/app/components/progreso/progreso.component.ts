@@ -5,10 +5,13 @@ import { ProgresoService } from '../../services/progreso.service';
 import { AuthService } from '../../services/auth.service';
 import { ProgresoResponse } from '../../models/models';
 
+import { NavComponent } from '../../shared/nav/nav.component';
+import { SceneComponent } from '../../shared/scene/scene.component';
+
 @Component({
   selector: 'app-progreso',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
   templateUrl: './progreso.component.html',
   styleUrls: ['./progreso.component.scss']
 })

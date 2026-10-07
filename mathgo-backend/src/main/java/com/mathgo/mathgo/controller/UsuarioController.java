@@ -51,6 +51,8 @@ public class UsuarioController {
             .rango(u.getRango())
             .rachaActual(u.getRachaActual())
             .mensajePadre(u.getMensajePadre())
+            .avatar(u.getAvatar())
+            .itemsComprados(u.getItemsComprados())
             .build();
     }
 
@@ -78,7 +80,8 @@ public class UsuarioController {
         return ResponseEntity.ok(new LoginResponse(
                 token, u.getId(), u.getNombre(), u.getRol(),
                 u.getVidas(), u.getNivelActual(), u.getXp(),
-                u.getRango(), u.getRachaActual()
+                u.getRango(), u.getRachaActual(),
+                u.getAvatar(), u.getItemsComprados()
         ));
     }
 
@@ -128,6 +131,23 @@ public class UsuarioController {
             u.setVidas(Math.min(u.getVidas() + vidasExtra, 5));
             usuarioRepository.save(u);
             return ResponseEntity.ok(Map.of("vidas", u.getVidas(), "mensaje", "Vidas actualizadas"));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Guardar el progreso del alumno (nivel, vidas, xp, avatar, avatares comprados)")
+    @PutMapping("/{id}/progreso")
+    public ResponseEntity<?> guardarProgreso(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+        return usuarioRepository.findById(id).map(u -> {
+            if (body.containsKey("vidas")) u.setVidas(((Number) body.get("vidas")).intValue());
+            if (body.containsKey("nivelActual")) u.setNivelActual(((Number) body.get("nivelActual")).intValue());
+            if (body.containsKey("xp")) u.setXp(((Number) body.get("xp")).intValue());
+            if (body.containsKey("rango")) u.setRango((String) body.get("rango"));
+            if (body.containsKey("rachaActual")) u.setRachaActual(((Number) body.get("rachaActual")).intValue());
+            if (body.containsKey("mejorRacha")) u.setMejorRacha(((Number) body.get("mejorRacha")).intValue());
+            if (body.containsKey("avatar")) u.setAvatar((String) body.get("avatar"));
+            if (body.containsKey("itemsComprados")) u.setItemsComprados((String) body.get("itemsComprados"));
+            usuarioRepository.save(u);
+            return ResponseEntity.ok(toDTO(u));
         }).orElse(ResponseEntity.notFound().build());
     }
 

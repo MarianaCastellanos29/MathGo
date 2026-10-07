@@ -6,10 +6,13 @@ import { UsuarioLogro, Logro } from '../../models/models';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 
+import { NavComponent } from '../../shared/nav/nav.component';
+import { SceneComponent } from '../../shared/scene/scene.component';
+
 @Component({
   selector: 'app-logros',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
   templateUrl: './logros.component.html',
   styleUrls: ['./logros.component.scss']
 })

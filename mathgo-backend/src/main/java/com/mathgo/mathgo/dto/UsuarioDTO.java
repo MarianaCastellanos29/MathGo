@@ -11,6 +11,8 @@ public class UsuarioDTO {
     private String rango;
     private int rachaActual;
     private String mensajePadre;
+    private String avatar;
+    private String itemsComprados;
 
     private UsuarioDTO() {}
 
@@ -29,6 +31,8 @@ public class UsuarioDTO {
         public Builder rango(String rango)           { dto.rango = rango; return this; }
         public Builder rachaActual(int rachaActual)  { dto.rachaActual = rachaActual; return this; }
         public Builder mensajePadre(String msg)      { dto.mensajePadre = msg; return this; }
+        public Builder avatar(String avatar)         { dto.avatar = avatar; return this; }
+        public Builder itemsComprados(String items)  { dto.itemsComprados = items; return this; }
         public UsuarioDTO build()                    { return dto; }
     }
 
@@ -42,4 +46,6 @@ public class UsuarioDTO {
     public String getRango()       { return rango; }
     public int getRachaActual()    { return rachaActual; }
     public String getMensajePadre(){ return mensajePadre; }
+    public String getAvatar()      { return avatar; }
+    public String getItemsComprados(){ return itemsComprados; }
 }

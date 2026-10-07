@@ -1,0 +1,5 @@
+.alumnos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.alumno { display: grid; gap: 14px; }
+.cab { display: flex; align-items: center; gap: 12px; .ava { font-size: 2.2rem; } h3 { font: 800 1.2rem var(--mg-display); } small { color: #b9a9f5; font-weight: 700; } .vidas { margin-left: auto; font-size: 1rem; } }
+.mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center;
+  strong { display: block; font: 800 1.2rem var(--mg-display); color: var(--mg-mint); } span { font-size: .72rem; color: #b9a9f5; font-weight: 700; } }

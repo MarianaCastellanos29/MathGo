@@ -1,34 +1,34 @@
-<div class="perfil-container">
-  <div class="header">
-    <a routerLink="/home" class="btn-back">← Volver</a>
-    <h1>🎨 Mi Avatar</h1>
-  </div>
-
-  <div class="avatar-actual">
-    <img [src]="getAvatarUrl(avatarSeleccionado)" [alt]="nombre" class="avatar-grande" />
-    <p class="nombre-usuario">{{ nombre }}</p>
-    <p class="hint">Compra más avatares en la <a routerLink="/tienda">🏪 Tienda</a></p>
-  </div>
-
-  <div class="avatares-grid">
-    <div *ngFor="let estilo of estilos"
-         class="avatar-opcion"
-         [class.seleccionado]="avatarSeleccionado === estilo.id"
-         [class.bloqueado]="!estaComprado(estilo.id)"
-         (click)="seleccionar(estilo.id)">
-      <div class="avatar-wrap">
-        <img [src]="getAvatarUrl(estilo.id)" [alt]="estilo.nombre"
-             [class.blur]="!estaComprado(estilo.id)" />
-        <div class="lock-overlay" *ngIf="!estaComprado(estilo.id)">
-          🔒
-        </div>
-      </div>
-      <span>{{ estilo.nombre }}</span>
-      <span class="precio-hint" *ngIf="!estaComprado(estilo.id)">Ver tienda</span>
+<div class="mg-page">
+  <app-scene></app-scene>
+  <app-nav></app-nav>
+  <main class="mg-main perfil">
+    <div class="mg-title">
+      <h1>🎨 Mi avatar</h1>
+      <p>Elige el personaje que te acompaña en la aventura</p>
     </div>
-  </div>
 
-  <button class="btn-guardar" (click)="guardar()">
-    {{ guardado ? '✅ ¡Guardado!' : '💾 Guardar avatar' }}
-  </button>
+    <div class="mg-card actual">
+      <img [src]="getAvatarUrl(avatarSeleccionado)" [alt]="nombre" class="grande" />
+      <div>
+        <h2>{{ nombre }}</h2>
+        <p>Consigue más avatares en la <a routerLink="/tienda">🏪 Tienda</a></p>
+      </div>
+    </div>
+
+    <div class="avatares">
+      <div *ngFor="let estilo of estilos" class="mg-card opcion"
+           [class.seleccionado]="avatarSeleccionado === estilo.id"
+           [class.bloqueado]="!estaComprado(estilo.id)"
+           (click)="seleccionar(estilo.id)">
+        <div class="wrap">
+          <img [src]="getAvatarUrl(estilo.id)" [alt]="estilo.nombre" [class.blur]="!estaComprado(estilo.id)" />
+          <span class="lock" *ngIf="!estaComprado(estilo.id)">🔒</span>
+        </div>
+        <strong>{{ estilo.nombre }}</strong>
+        <small *ngIf="!estaComprado(estilo.id)">Ver tienda</small>
+      </div>
+    </div>
+
+    <div class="guardar"><button class="mg-btn" (click)="guardar()">{{ guardado ? '✅ ¡Guardado!' : '💾 Guardar avatar' }}</button></div>
+  </main>
 </div>

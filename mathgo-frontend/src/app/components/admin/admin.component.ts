@@ -10,10 +10,14 @@ interface AlumnoConProgreso extends Usuario {
   progreso?: ProgresoResponse;
 }
 
+import { HeartsComponent } from '../../shared/hearts/hearts.component';
+
+import { SceneComponent } from '../../shared/scene/scene.component';
+
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeartsComponent, SceneComponent],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })

@@ -19,6 +19,9 @@ public class Usuario {
     private String rango = "Aprendiz";
     @Column(length = 500)
     private String mensajePadre;
+    private String avatar = "adventurer";
+    @Column(length = 1000)
+    private String itemsComprados = "adventurer";
 
     public Usuario() {}
 
@@ -34,6 +37,8 @@ public class Usuario {
     public int getXp() { return xp; }
     public String getRango() { return rango; }
     public String getMensajePadre() { return mensajePadre; }
+    public String getAvatar() { return avatar; }
+    public String getItemsComprados() { return itemsComprados; }
 
     public void setId(Long id) { this.id = id; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -47,4 +52,6 @@ public class Usuario {
     public void setXp(int xp) { this.xp = xp; }
     public void setRango(String rango) { this.rango = rango; }
     public void setMensajePadre(String mensajePadre) { this.mensajePadre = mensajePadre; }
+    public void setAvatar(String avatar) { this.avatar = avatar; }
+    public void setItemsComprados(String itemsComprados) { this.itemsComprados = itemsComprados; }
 }

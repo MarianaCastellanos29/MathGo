@@ -27,10 +27,7 @@ export class TiendaService {
   constructor(private auth: AuthService) {}
 
   getItemsComprados(): string[] {
-    const raw = localStorage.getItem('itemsComprados');
-    const comprados: string[] = raw ? JSON.parse(raw) : ['adventurer'];
-    if (!comprados.includes('adventurer')) comprados.push('adventurer');
-    return comprados;
+    return this.auth.getItemsComprados();
   }
 
   estaComprado(itemId: string): boolean {
@@ -46,10 +43,8 @@ export class TiendaService {
       return { ok: false, mensaje: `Te faltan ${item.precio - xp} monedas` };
     }
     const nuevaXp = xp - item.precio;
-    this.auth.setXp(nuevaXp);
-    const comprados = this.getItemsComprados();
-    comprados.push(item.id);
-    localStorage.setItem('itemsComprados', JSON.stringify(comprados));
+    const comprados = [...this.getItemsComprados(), item.id];
+    this.auth.guardarProgreso({ xp: nuevaXp, itemsComprados: comprados.join(',') }).subscribe();
     return { ok: true, mensaje: `¡${item.nombre} desbloqueado!` };
   }
 

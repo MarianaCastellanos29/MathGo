@@ -1,130 +1,85 @@
-<div class="padre-container">
-
-  <div class="particles-bg">
-    <span *ngFor="let e of ['👨‍👩‍👧','📊','⭐','🏆','📋','❤️']" class="particle-p"
-          [style.left.%]="('👨‍👩‍👧📊⭐🏆📋❤️'.indexOf(e)) * 17 + 2"
-          [style.animationDelay]="('👨‍👩‍👧📊⭐🏆📋❤️'.indexOf(e) * 1.5) + 's'">{{e}}</span>
-  </div>
-
-  <!-- Header -->
-  <div class="header">
-    <h1>👨‍👩‍👧 Panel del Padre</h1>
-    <div class="header-right">
-      <span class="nombre-padre">{{ nombrePadre }}</span>
-      <button class="btn-logout" (click)="logout()">Salir</button>
+<div class="mg-page">
+  <app-scene></app-scene>
+  <header class="mg-nav">
+    <span class="mg-brand"><img src="assets/img/logo.png" alt="MathGo" /></span>
+    <span class="rol">👨‍👩‍👧 Panel del padre</span>
+    <div class="mg-nav-right" style="margin-left:auto">
+      <span class="mg-user"><span>{{ nombrePadre }}</span></span>
+      <button class="mg-pill" (click)="logout()">Salir</button>
     </div>
-  </div>
+  </header>
 
-  <!-- LOGIN DEL NIÑO -->
-  <div *ngIf="!alumnoSeleccionado" class="login-nino-section">
-    <div class="login-nino-card">
-      <div class="login-nino-icon">🧒</div>
+  <main class="mg-main">
+    <!-- Buscar niño -->
+    <div *ngIf="!alumnoSeleccionado" class="mg-card buscar">
+      <app-pyro class="buscar-pyro" mood="happy"></app-pyro>
       <h2>¿A qué niño quieres ver?</h2>
       <p>Ingresa el correo y contraseña del niño para ver su progreso</p>
-
-      <div class="login-nino-form">
-        <input class="input-field" type="email" [(ngModel)]="correoNino"
-               placeholder="📧 Correo del niño"
-               (keyup.enter)="buscarNino()" />
-        <input class="input-field" type="password" [(ngModel)]="passwordNino"
-               placeholder="🔒 Contraseña del niño"
-               (keyup.enter)="buscarNino()" />
-        <p class="error-msg" *ngIf="errorLogin">⚠️ {{ errorLogin }}</p>
-        <button class="btn-buscar" (click)="buscarNino()" [disabled]="cargandoLogin">
-          {{ cargandoLogin ? 'Buscando...' : '🔍 Ver progreso' }}
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- DETALLE DEL ALUMNO -->
-  <div *ngIf="alumnoSeleccionado" class="detalle">
-
-    <button class="btn-volver" (click)="volver()">← Buscar otro niño</button>
-
-    <!-- Perfil -->
-    <div class="perfil-card">
-      <img [src]="avatarUrl" class="perfil-avatar" [alt]="alumnoSeleccionado.nombre" />
-      <div class="perfil-info">
-        <h2>{{ alumnoSeleccionado.nombre }}</h2>
-        <p>{{ corazones }}</p>
-        <div class="perfil-stats">
-          <span>{{ rangoEmoji }} {{ alumnoSeleccionado.rango }}</span>
-          <span>⭐ {{ alumnoSeleccionado.xp }} XP</span>
-          <span>🔥 Racha: {{ alumnoSeleccionado.rachaActual }}</span>
-          <span>📚 Nivel {{ alumnoSeleccionado.nivelActual }}</span>
-        </div>
+      <div class="form">
+        <input class="campo" type="email" [(ngModel)]="correoNino" placeholder="📧 Correo del niño" (keyup.enter)="buscarNino()" />
+        <input class="campo" type="password" [(ngModel)]="passwordNino" placeholder="🔒 Contraseña del niño" (keyup.enter)="buscarNino()" />
+        <p class="error" *ngIf="errorLogin">⚠️ {{ errorLogin }}</p>
+        <button class="mg-btn" (click)="buscarNino()" [disabled]="cargandoLogin">{{ cargandoLogin ? 'Buscando...' : '🔍 Ver progreso' }}</button>
       </div>
     </div>
 
-    <!-- Reporte semanal -->
-    <div class="seccion" *ngIf="reporte">
-      <h3>📊 Reporte Semanal</h3>
-      <div class="reporte-grid">
-        <div class="reporte-stat verde">
-          <span class="r-num">{{ reporte.correctos }}</span>
-          <span class="r-label">✅ Correctas</span>
+    <!-- Detalle -->
+    <div *ngIf="alumnoSeleccionado" class="detalle">
+      <button class="mg-pill volver" (click)="volver()">← Buscar otro niño</button>
+
+      <div class="mg-card perfil">
+        <img [src]="avatarUrl" class="avatar" [alt]="alumnoSeleccionado.nombre" />
+        <div>
+          <h2>{{ alumnoSeleccionado.nombre }}</h2>
+          <app-hearts class="vidas" [vidas]="alumnoSeleccionado.vidas || 0"></app-hearts>
+          <div class="chips">
+            <span class="mg-pill">{{ rangoEmoji }} {{ alumnoSeleccionado.rango }}</span>
+            <span class="mg-pill">⭐ {{ alumnoSeleccionado.xp }} XP</span>
+            <span class="mg-pill">🔥 Racha: {{ alumnoSeleccionado.rachaActual }}</span>
+            <span class="mg-pill">📚 Nivel {{ alumnoSeleccionado.nivelActual }}</span>
+          </div>
         </div>
-        <div class="reporte-stat rojo">
-          <span class="r-num">{{ reporte.incorrectos }}</span>
-          <span class="r-label">❌ Incorrectas</span>
+      </div>
+
+      <section *ngIf="reporte">
+        <h3>📊 Reporte semanal</h3>
+        <div class="mg-stats">
+          <div class="mg-card mg-stat"><span class="ico"><img class="mg-ico" src="assets/img/check.png" alt="" /></span><strong>{{ reporte.correctos }}</strong><span class="lbl">Correctas</span></div>
+          <div class="mg-card mg-stat pink"><span class="ico"><img class="mg-ico" src="assets/img/cross.png" alt="" /></span><strong>{{ reporte.incorrectos }}</strong><span class="lbl">Incorrectas</span></div>
+          <div class="mg-card mg-stat sky"><span class="ico"><img class="mg-ico" src="assets/img/target.png" alt="" /></span><strong>{{ reporte.porcentaje }}%</strong><span class="lbl">Precisión</span></div>
+          <div class="mg-card mg-stat gold"><span class="ico"><img class="mg-ico" src="assets/img/bars.png" alt="" /></span><strong>{{ reporte.total }}</strong><span class="lbl">Total</span></div>
         </div>
-        <div class="reporte-stat azul">
-          <span class="r-num">{{ reporte.porcentaje }}%</span>
-          <span class="r-label">🎯 Precisión</span>
+      </section>
+
+      <section *ngIf="logros.length > 0">
+        <h3>🏅 Logros obtenidos ({{ logros.length }})</h3>
+        <div class="logros-mini">
+          <span class="mg-pill" *ngFor="let ul of logros">{{ ul.logro.icono }} {{ ul.logro.nombre }}</span>
         </div>
-        <div class="reporte-stat morado">
-          <span class="r-num">{{ reporte.total }}</span>
-          <span class="r-label">📋 Total</span>
+      </section>
+
+      <section *ngIf="historial.length > 0">
+        <h3>📋 Últimos 10 ejercicios</h3>
+        <div class="mg-card hist">
+          <div class="hist-fila" *ngFor="let h of historial" [class.correcto]="h.correcto" [class.incorrecto]="!h.correcto">
+            <span class="p">{{ h.pregunta }}</span><span class="n">{{ nivelNombre(h.nivel) }}</span><span>{{ h.correcto ? '✅' : '❌' }}</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="acciones">
+        <div class="mg-card accion">
+          <h3>❤️ Dar vidas</h3>
+          <p>Restaura las vidas de {{ alumnoSeleccionado.nombre }} a 5.</p>
+          <button class="mg-btn" (click)="darVidas()" [disabled]="vidasDadas">{{ vidasDadas ? '✅ ¡Vidas dadas!' : '❤️ Dar 5 vidas' }}</button>
+        </div>
+        <div class="mg-card accion">
+          <h3>💌 Mensaje de motivación</h3>
+          <p>Escribe algo para {{ alumnoSeleccionado.nombre }}. Le aparecerá al iniciar sesión.</p>
+          <textarea class="campo" [(ngModel)]="mensaje" placeholder="¡Sigue adelante campeón! 🌟" rows="3"></textarea>
+          <button class="mg-btn" (click)="enviarMensaje()" [disabled]="mensajeEnviado">{{ mensajeEnviado ? '✅ ¡Mensaje enviado!' : '💌 Enviar mensaje' }}</button>
         </div>
       </div>
     </div>
-
-    <!-- Logros -->
-    <div class="seccion" *ngIf="logros.length > 0">
-      <h3>🏅 Logros obtenidos ({{ logros.length }})</h3>
-      <div class="logros-mini">
-        <div class="logro-mini" *ngFor="let ul of logros">
-          <span>{{ ul.logro.icono }}</span>
-          <span>{{ ul.logro.nombre }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Historial -->
-    <div class="seccion" *ngIf="historial.length > 0">
-      <h3>📋 Últimos 10 ejercicios</h3>
-      <div class="historial-mini">
-        <div class="hist-fila" *ngFor="let h of historial"
-             [class.correcto]="h.correcto" [class.incorrecto]="!h.correcto">
-          <span>{{ h.pregunta }}</span>
-          <span>{{ nivelNombre(h.nivel) }}</span>
-          <span>{{ h.correcto ? '✅' : '❌' }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Acciones -->
-    <div class="acciones">
-      <div class="accion-card">
-        <h3>❤️ Dar vidas</h3>
-        <p>Restaura las vidas de {{ alumnoSeleccionado.nombre }} a 5.</p>
-        <button class="btn-accion" (click)="darVidas()" [disabled]="vidasDadas">
-          {{ vidasDadas ? '✅ ¡Vidas dadas!' : '❤️ Dar 5 vidas' }}
-        </button>
-      </div>
-
-      <div class="accion-card">
-        <h3>💌 Mensaje de motivación</h3>
-        <p>Escribe algo para {{ alumnoSeleccionado.nombre }}. Le aparecerá al iniciar sesión.</p>
-        <textarea class="input-mensaje" [(ngModel)]="mensaje"
-                  placeholder="¡Sigue adelante campeón! 🌟"
-                  rows="3"></textarea>
-        <button class="btn-accion" (click)="enviarMensaje()" [disabled]="mensajeEnviado">
-          {{ mensajeEnviado ? '✅ ¡Mensaje enviado!' : '💌 Enviar mensaje' }}
-        </button>
-      </div>
-    </div>
-
-  </div>
+  </main>
 </div>

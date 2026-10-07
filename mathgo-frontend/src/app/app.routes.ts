@@ -47,6 +47,26 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'juegos',
+    loadComponent: () => import('./components/juegos/juegos-home/juegos-home.component').then(m => m.JuegosHomeComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'juegos/memorama',
+    loadComponent: () => import('./components/juegos/memorama/memorama.component').then(m => m.MemoramaComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'juegos/carrera',
+    loadComponent: () => import('./components/juegos/carrera/carrera.component').then(m => m.CarreraComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'apoyo',
+    loadComponent: () => import('./components/apoyo/apoyo.component').then(m => m.ApoyoComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'admin',
     loadComponent: () => import('./components/padre/padre.component').then(m => m.PadreComponent),
     canActivate: [authGuard]

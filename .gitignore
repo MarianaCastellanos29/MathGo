@@ -4,3 +4,4 @@ dist/
 *.log
 todos-los-logs.txt
  target/ 
+mathgo-backend/target/

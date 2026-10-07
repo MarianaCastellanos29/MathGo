@@ -1,8 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, catchError, of } from 'rxjs';
 import { LoginResponse, Usuario } from '../models/models';
+
+/** Campos de progreso que se pueden guardar en el backend (usuario NINO). */
+export interface ProgresoGuardable {
+  vidas?: number;
+  nivelActual?: number;
+  xp?: number;
+  rango?: string;
+  rachaActual?: number;
+  mejorRacha?: number;
+  avatar?: string;
+  itemsComprados?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -26,6 +38,10 @@ export class AuthService {
         localStorage.setItem('xp', (res.xp ?? 0).toString());
         localStorage.setItem('rango', res.rango ?? 'Aprendiz');
         localStorage.setItem('rachaActual', (res.rachaActual ?? 0).toString());
+        localStorage.setItem('avatar', res.avatar ?? 'adventurer');
+        localStorage.setItem('itemsComprados', JSON.stringify(
+          (res.itemsComprados ?? 'adventurer').split(',').map(s => s.trim()).filter(Boolean)
+        ));
       })
     );
   }
@@ -75,37 +91,59 @@ export class AuthService {
     return Number(localStorage.getItem('rachaActual'));
   }
 
-  setVidas(v: number): void {
-    localStorage.setItem('vidas', v.toString());
-  }
-
-  setNivelActual(nivel: number): void {
-    localStorage.setItem('nivelActual', nivel.toString());
-  }
-
-  setXp(xp: number): void {
-    localStorage.setItem('xp', xp.toString());
-  }
-
-  setRango(rango: string): void {
-    localStorage.setItem('rango', rango);
-  }
-
-  setRachaActual(racha: number): void {
-    localStorage.setItem('rachaActual', racha.toString());
+  getItemsComprados(): string[] {
+    const raw = localStorage.getItem('itemsComprados');
+    const comprados: string[] = raw ? JSON.parse(raw) : ['adventurer'];
+    if (!comprados.includes('adventurer')) comprados.push('adventurer');
+    return comprados;
   }
 
   getAvatar(): string {
     return localStorage.getItem('avatar') ?? 'adventurer';
   }
 
-  setAvatar(estilo: string): void {
-    localStorage.setItem('avatar', estilo);
-  }
-
   getAvatarUrl(): string {
     const estilo = this.getAvatar();
     const nombre = this.getNombre();
     return `https://api.dicebear.com/7.x/${estilo}/svg?seed=${encodeURIComponent(nombre)}&backgroundColor=b6e3f4`;
+  }
+
+  /**
+   * Actualiza el progreso en localStorage (para que la UI reaccione al instante)
+   * y lo envía al backend para que quede guardado de verdad en la base de datos.
+   * Si no hay conexión, el cambio se queda en localStorage y no rompe la sesión
+   * actual, aunque no haya podido sincronizarse.
+   */
+  guardarProgreso(datos: ProgresoGuardable): Observable<any> {
+    if (datos.vidas !== undefined) localStorage.setItem('vidas', datos.vidas.toString());
+    if (datos.nivelActual !== undefined) localStorage.setItem('nivelActual', datos.nivelActual.toString());
+    if (datos.xp !== undefined) localStorage.setItem('xp', datos.xp.toString());
+    if (datos.rango !== undefined) localStorage.setItem('rango', datos.rango);
+    if (datos.rachaActual !== undefined) localStorage.setItem('rachaActual', datos.rachaActual.toString());
+    if (datos.avatar !== undefined) localStorage.setItem('avatar', datos.avatar);
+    if (datos.itemsComprados !== undefined) {
+      localStorage.setItem('itemsComprados', JSON.stringify(datos.itemsComprados.split(',').filter(Boolean)));
+    }
+
+    const id = this.getUsuarioId();
+    if (!id) return of(null);
+    return this.http.put(`${this.API}/${id}/progreso`, datos).pipe(
+      catchError(err => {
+        console.error('No se pudo guardar el progreso en el servidor', err);
+        return of(null);
+      })
+    );
+  }
+
+  /** Compra un avatar: lo agrega a la lista de comprados y lo guarda en el backend. */
+  comprarAvatar(itemId: string): void {
+    const comprados = this.getItemsComprados();
+    if (!comprados.includes(itemId)) comprados.push(itemId);
+    this.guardarProgreso({ itemsComprados: comprados.join(',') }).subscribe();
+  }
+
+  /** Selecciona el avatar activo y lo guarda en el backend. */
+  setAvatarActivo(estilo: string): void {
+    this.guardarProgreso({ avatar: estilo }).subscribe();
   }
 }

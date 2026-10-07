@@ -1,64 +1,44 @@
-<div class="admin-container">
-  <header class="home-header">
-    <div class="logo-small">🎮 MathGo</div>
-    <div class="user-info">
-      <span class="nombre">{{ nombre }} ({{ rol }})</span>
-      <button class="btn-logout" (click)="logout()">Salir</button>
+<div class="mg-page">
+  <app-scene></app-scene>
+  <header class="mg-nav">
+    <span class="mg-brand"><img src="assets/img/logo.png" alt="MathGo" /></span>
+    <div class="mg-nav-right" style="margin-left:auto">
+      <span class="mg-user"><span>{{ nombre }} ({{ rol }})</span></span>
+      <button class="mg-pill" (click)="logout()">Salir</button>
     </div>
   </header>
 
-  <main class="admin-main">
-    <h2>👨‍👩‍👧 Panel de Seguimiento</h2>
-    <p class="subtitle">Progreso de todos los alumnos registrados</p>
+  <main class="mg-main">
+    <div class="mg-title">
+      <h1>👨‍👩‍👧 Panel de seguimiento</h1>
+      <p>Progreso de todos los alumnos registrados</p>
+    </div>
 
-    <div *ngIf="cargando" class="cargando">⏳ Cargando alumnos...</div>
+    <div *ngIf="cargando" class="mg-loading">⏳ Cargando alumnos...</div>
 
-    <div class="alumnos-grid" *ngIf="!cargando">
-      <div *ngIf="alumnos.length === 0" class="no-alumnos">
-        No hay alumnos registrados todavía.
-      </div>
+    <div class="alumnos" *ngIf="!cargando">
+      <div *ngIf="alumnos.length === 0" class="mg-card mg-empty">No hay alumnos registrados todavía.</div>
 
-      <div *ngFor="let alumno of alumnos" class="alumno-card">
-        <div class="alumno-header">
-          <span class="alumno-avatar">👦</span>
-          <div>
-            <h3>{{ alumno.nombre }}</h3>
-            <span class="alumno-correo">{{ alumno.correo }}</span>
-          </div>
-          <div class="alumno-vidas">
-            <span *ngFor="let v of [].constructor(alumno.vidas || 0)">❤️</span>
-            <span *ngFor="let v of [].constructor(5 - (alumno.vidas || 0))">🖤</span>
-          </div>
+      <div *ngFor="let alumno of alumnos" class="mg-card alumno">
+        <div class="cab">
+          <span class="ava">👦</span>
+          <div><h3>{{ alumno.nombre }}</h3><small>{{ alumno.correo }}</small></div>
+          <app-hearts class="vidas" [vidas]="alumno.vidas || 0"></app-hearts>
         </div>
 
-        <div class="alumno-stats" *ngIf="alumno.progreso">
-          <div class="stat-mini">
-            <strong>{{ alumno.progreso.total }}</strong>
-            <span>ejercicios</span>
-          </div>
-          <div class="stat-mini">
-            <strong>{{ alumno.progreso.correctos }}</strong>
-            <span>correctos</span>
-          </div>
-          <div class="stat-mini">
-            <strong>{{ alumno.progreso.porcentaje }}%</strong>
-            <span>aciertos</span>
-          </div>
-          <div class="stat-mini">
-            <strong>Nv. {{ alumno.nivelActual }}</strong>
-            <span>nivel</span>
-          </div>
+        <div class="mini" *ngIf="alumno.progreso">
+          <div><strong>{{ alumno.progreso.total }}</strong><span>ejercicios</span></div>
+          <div><strong>{{ alumno.progreso.correctos }}</strong><span>correctos</span></div>
+          <div><strong>{{ alumno.progreso.porcentaje }}%</strong><span>aciertos</span></div>
+          <div><strong>Nv. {{ alumno.nivelActual }}</strong><span>nivel</span></div>
         </div>
 
-        <div class="barra-alumno" *ngIf="alumno.progreso">
-          <div class="barra-fill-alumno"
-               [style.width.%]="alumno.progreso.porcentaje"
-               [class.baja]="alumno.progreso.porcentaje < 50"
-               [class.media]="alumno.progreso.porcentaje >= 50 && alumno.progreso.porcentaje < 80"
-               [class.alta]="alumno.progreso.porcentaje >= 80">
-          </div>
+        <div class="mg-bar" *ngIf="alumno.progreso">
+          <i [style.width.%]="alumno.progreso.porcentaje"
+             [class.baja]="alumno.progreso.porcentaje < 50"
+             [class.media]="alumno.progreso.porcentaje >= 50 && alumno.progreso.porcentaje < 80"></i>
         </div>
-        <div *ngIf="!alumno.progreso" class="cargando-mini">Cargando progreso...</div>
+        <div *ngIf="!alumno.progreso" class="mg-loading">Cargando progreso...</div>
       </div>
     </div>
   </main>

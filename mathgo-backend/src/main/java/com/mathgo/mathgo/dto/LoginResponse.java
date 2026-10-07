@@ -10,9 +10,12 @@ public class LoginResponse {
     private int xp;
     private String rango;
     private int rachaActual;
+    private String avatar;
+    private String itemsComprados;
 
     public LoginResponse(String token, Long usuarioId, String nombre, String rol,
-                         int vidas, int nivelActual, int xp, String rango, int rachaActual) {
+                         int vidas, int nivelActual, int xp, String rango, int rachaActual,
+                         String avatar, String itemsComprados) {
         this.token       = token;
         this.usuarioId   = usuarioId;
         this.nombre      = nombre;
@@ -22,6 +25,8 @@ public class LoginResponse {
         this.xp          = xp;
         this.rango       = rango;
         this.rachaActual = rachaActual;
+        this.avatar = avatar;
+        this.itemsComprados = itemsComprados;
     }
 
     public String getToken()    { return token; }
@@ -33,4 +38,6 @@ public class LoginResponse {
     public int getXp()          { return xp; }
     public String getRango()    { return rango; }
     public int getRachaActual() { return rachaActual; }
+    public String getAvatar() { return avatar; }
+    public String getItemsComprados() { return itemsComprados; }
 }

@@ -1,0 +1,30 @@
+<div class="mg-page">
+  <app-scene></app-scene>
+  <app-nav></app-nav>
+
+  <main class="mg-main ap-main">
+    <div class="mg-title">
+      <h1>📚 Espacio de apoyo</h1>
+      <p>{{ nombre }}, aquí tienes videos para repasar cada tema con calma. Se abren en una pestaña nueva.</p>
+    </div>
+
+    <section class="ap-tema" *ngFor="let tema of temas">
+      <h2><span class="ico">{{ tema.emoji }}</span> {{ tema.nombre }}</h2>
+
+      <div class="ap-grid">
+        <button class="mg-card ap-card" *ngFor="let r of tema.recursos" (click)="abrir(r.url)">
+          <span class="ap-tipo">🎥 Video</span>
+          <h3>{{ r.titulo }}</h3>
+          <p>{{ r.descripcion }}</p>
+          <span class="ap-canal">Canal: {{ r.canal }}</span>
+          <span class="ap-ver">Ver en YouTube ↗</span>
+        </button>
+      </div>
+    </section>
+
+    <p class="mg-card ap-nota">
+      ℹ️ Estos enlaces abren una búsqueda ya filtrada por canales educativos confiables, para asegurar
+      que el video siga disponible aunque cambie con el tiempo.
+    </p>
+  </main>
+</div>

@@ -5,10 +5,13 @@ import { HistorialService } from '../../services/historial.service';
 import { HistorialItem } from '../../models/models';
 import { AuthService } from '../../services/auth.service';
 
+import { NavComponent } from '../../shared/nav/nav.component';
+import { SceneComponent } from '../../shared/scene/scene.component';
+
 @Component({
   selector: 'app-historial',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
   templateUrl: './historial.component.html',
   styleUrls: ['./historial.component.scss']
 })

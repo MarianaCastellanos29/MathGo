@@ -5,10 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { PadreService } from '../../services/padre.service';
 import { AuthService } from '../../services/auth.service';
 
+import { PyroComponent } from '../../shared/pyro/pyro.component';
+import { HeartsComponent } from '../../shared/hearts/hearts.component';
+
+import { SceneComponent } from '../../shared/scene/scene.component';
+
 @Component({
   selector: 'app-padre',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, PyroComponent, HeartsComponent, SceneComponent],
   templateUrl: './padre.component.html',
   styleUrls: ['./padre.component.scss']
 })

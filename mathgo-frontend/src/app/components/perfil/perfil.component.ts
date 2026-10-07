@@ -4,10 +4,13 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TiendaService } from '../../services/tienda.service';
 
+import { NavComponent } from '../../shared/nav/nav.component';
+import { SceneComponent } from '../../shared/scene/scene.component';
+
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss']
 })
@@ -48,7 +51,7 @@ export class PerfilComponent implements OnInit {
   }
 
   guardar(): void {
-    this.auth.setAvatar(this.avatarSeleccionado);
+    this.auth.setAvatarActivo(this.avatarSeleccionado);
     this.guardado = true;
     setTimeout(() => this.guardado = false, 2000);
   }

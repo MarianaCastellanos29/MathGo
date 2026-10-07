@@ -4,11 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EjercicioService, EjercicioAPI } from '../../services/ejercicio.service';
 import { AuthService } from '../../services/auth.service';
 import { HistorialService } from '../../services/historial.service';
+import { PyroComponent } from '../../shared/pyro/pyro.component';
+import { HeartsComponent } from '../../shared/hearts/hearts.component';
+
+import { SceneComponent } from '../../shared/scene/scene.component';
 
 @Component({
   selector: 'app-ejercicios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PyroComponent, HeartsComponent, SceneComponent],
   templateUrl: './ejercicios.component.html',
   styleUrls: ['./ejercicios.component.scss']
 })
@@ -82,11 +86,12 @@ export class EjerciciosComponent implements OnInit {
       correcto
     ).subscribe({
       next: (res) => {
-        // Sincronizar XP, rango y racha con lo que devuelve el backend
+        // El backend ya guardó XP, rango y racha en la base de datos;
+        // solo reflejamos esos valores en el almacenamiento local.
         if (correcto) {
-          this.auth.setXp(res.xp);
-          this.auth.setRango(res.rango);
-          this.auth.setRachaActual(res.rachaActual);
+          localStorage.setItem('xp', res.xp.toString());
+          localStorage.setItem('rango', res.rango);
+          localStorage.setItem('rachaActual', res.rachaActual.toString());
         }
       },
       error: (err) => console.error('Error guardando resultado:', err)
@@ -112,7 +117,7 @@ if (!Number.isNaN(numero) && numero > 0) {
       }
     } else {
       this.vidas = Math.max(0, this.vidas - 1);
-      this.auth.setVidas(this.vidas);
+      this.auth.guardarProgreso({ vidas: this.vidas }).subscribe();
       this.mensajeFeedback = `❌ Respuesta incorrecta`;
 
       this.ejercicioService.explicarError(
@@ -155,7 +160,7 @@ if (!Number.isNaN(numero) && numero > 0) {
       this.finNivel = true;
       const nuevoNivel = this.nivel + 1;
       if (nuevoNivel <= this.MAX_NIVELES && nuevoNivel > this.auth.getNivelActual()) {
-        this.auth.setNivelActual(nuevoNivel);
+        this.auth.guardarProgreso({ nivelActual: nuevoNivel }).subscribe();
       }
     }
   }
@@ -178,6 +183,14 @@ if (!Number.isNaN(numero) && numero > 0) {
     return this.ejercicios.length > 0
       ? Math.round((this.indiceActual / this.ejercicios.length) * 100)
       : 0;
+  }
+
+  /** Divide la pregunta para resaltar los números en verde. */
+  get preguntaPartes(): { t: string; n: boolean }[] {
+    const texto = this.ejercicioActual?.pregunta ?? '';
+    return texto.split(/(\d+(?:[.,]\d+)?)/)
+      .filter(t => t !== '')
+      .map(t => ({ t, n: /^\d/.test(t) }));
   }
 
   get xpActual(): number { return this.auth.getXp(); }
