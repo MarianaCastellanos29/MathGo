@@ -9,12 +9,15 @@ import com.mathgo.mathgo.model.Usuario;
 import com.mathgo.mathgo.repository.ResultadoRepository;
 import com.mathgo.mathgo.repository.UsuarioRepository;
 import com.mathgo.mathgo.security.JwtUtil;
+import com.mathgo.mathgo.security.PasswordUtil;
 import com.mathgo.mathgo.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,9 +59,26 @@ public class UsuarioController {
             .build();
     }
 
+    /** Valida la contraseña; si es de un usuario antiguo (texto plano) la migra a BCrypt. */
+    private boolean passwordValida(Usuario u, String ingresada) {
+        if (!PasswordUtil.coincide(ingresada, u.getPassword())) {
+            return false;
+        }
+        if (!PasswordUtil.esHash(u.getPassword())) {
+            u.setPassword(PasswordUtil.encriptar(ingresada));
+            usuarioRepository.save(u);
+        }
+        return true;
+    }
+
     @Operation(summary = "Registrar nuevo usuario")
     @PostMapping("/registro")
     public ResponseEntity<UsuarioDTO> registrar(@RequestBody RegistroRequest req) {
+        // El rol ADMIN no se puede obtener desde el registro publico
+        if ("ADMIN".equalsIgnoreCase(req.getRol())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "No se puede registrar un usuario con ese rol");
+        }
         Usuario usuario = new Usuario();
         usuario.setNombre(req.getNombre());
         usuario.setCorreo(req.getCorreo());
@@ -72,11 +92,11 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
         Usuario u = usuarioRepository.findByCorreo(req.getCorreo());
-        if (u == null || !u.getPassword().equals(req.getPassword())) {
+        if (u == null || !passwordValida(u, req.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Credenciales incorrectas");
         }
-        String token = JwtUtil.generarToken(u.getCorreo());
+        String token = JwtUtil.generarToken(u.getCorreo(), u.getRol());
         return ResponseEntity.ok(new LoginResponse(
                 token, u.getId(), u.getNombre(), u.getRol(),
                 u.getVidas(), u.getNivelActual(), u.getXp(),
@@ -94,6 +114,7 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Obtener usuario por ID")
+    @PreAuthorize("@acceso.puedeAcceder(#id)")
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> obtener(@PathVariable Long id) {
         return usuarioRepository.findById(id)
@@ -124,6 +145,7 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Dar vidas extra a un alumno")
+    @PreAuthorize("@acceso.puedeAcceder(#id)")
     @PostMapping("/{id}/dar-vidas")
     public ResponseEntity<?> darVidas(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
         return usuarioRepository.findById(id).map(u -> {
@@ -135,6 +157,7 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Guardar el progreso del alumno (nivel, vidas, xp, avatar, avatares comprados)")
+    @PreAuthorize("@acceso.puedeAcceder(#id)")
     @PutMapping("/{id}/progreso")
     public ResponseEntity<?> guardarProgreso(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         return usuarioRepository.findById(id).map(u -> {
@@ -162,6 +185,7 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Obtener mensaje del padre para el alumno")
+    @PreAuthorize("@acceso.esPropietario(#id)")
     @GetMapping("/{id}/mensaje")
     public ResponseEntity<?> obtenerMensaje(@PathVariable Long id) {
         return usuarioRepository.findById(id).map(u -> {
@@ -173,6 +197,7 @@ public class UsuarioController {
     }
 
     @Operation(summary = "Reporte semanal de un alumno")
+    @PreAuthorize("@acceso.puedeAcceder(#id)")
     @GetMapping("/{id}/reporte-semanal")
     public ResponseEntity<?> reporteSemanal(@PathVariable Long id) {
         LocalDateTime hace7dias = LocalDateTime.now().minusDays(7);
@@ -203,7 +228,7 @@ public class UsuarioController {
     @PostMapping("/login-nino")
     public ResponseEntity<?> loginNino(@RequestBody LoginRequest req) {
         Usuario u = usuarioRepository.findByCorreo(req.getCorreo());
-        if (u == null || !u.getPassword().equals(req.getPassword())) {
+        if (u == null || !passwordValida(u, req.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Credenciales incorrectas");
         }

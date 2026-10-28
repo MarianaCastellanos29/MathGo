@@ -9,6 +9,7 @@ import com.mathgo.mathgo.service.LogroService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,12 +34,14 @@ public class HistorialController {
     }
 
     @Operation(summary = "Obtener historial de un usuario")
+    @PreAuthorize("@acceso.puedeAcceder(#usuarioId)")
     @GetMapping("/{usuarioId}")
     public List<Resultado> obtenerHistorial(@PathVariable Long usuarioId) {
         return resultadoRepository.findByUsuarioIdOrderByFechaRespuestaDesc(usuarioId);
     }
 
     @Operation(summary = "Guardar resultado de un ejercicio")
+    @PreAuthorize("@acceso.puedeAcceder(#body['usuarioId'])")
     @PostMapping("/guardar")
     public ResponseEntity<?> guardarResultado(@RequestBody Map<String, Object> body) {
         Long usuarioId = Long.valueOf(body.get("usuarioId").toString());
@@ -81,6 +84,7 @@ public class HistorialController {
     }
 
     @Operation(summary = "Obtener logros de un usuario")
+    @PreAuthorize("@acceso.puedeAcceder(#usuarioId)")
     @GetMapping("/{usuarioId}/logros")
     public List<UsuarioLogro> obtenerLogros(@PathVariable Long usuarioId) {
         return logroService.obtenerLogrosDeUsuario(usuarioId);

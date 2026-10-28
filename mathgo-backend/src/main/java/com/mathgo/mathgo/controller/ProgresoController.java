@@ -4,6 +4,7 @@ import com.mathgo.mathgo.dto.ProgresoResponse;
 import com.mathgo.mathgo.service.ProgresoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Progreso", description = "Consulta el progreso del alumno")
@@ -19,6 +20,7 @@ public class ProgresoController {
     }
 
     @Operation(summary = "Obtener progreso de un usuario")
+    @PreAuthorize("@acceso.puedeAcceder(#usuarioId)")
     @GetMapping("/{usuarioId}")
     public ProgresoResponse obtener(@PathVariable Long usuarioId) {
         return progresoService.obtenerProgreso(usuarioId);

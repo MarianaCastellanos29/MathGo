@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,11 +27,18 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 String correo = JwtUtil.extraerCorreo(token);
                 if (correo != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    String rol = JwtUtil.extraerRol(token);
+                    List<SimpleGrantedAuthority> autoridades =
+                            (rol == null || rol.isBlank())
+                                    ? List.of()
+                                    : List.of(new SimpleGrantedAuthority("ROLE_" + rol.toUpperCase()));
+
                     UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(correo, null, List.of());
+                            new UsernamePasswordAuthenticationToken(correo, null, autoridades);
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (Exception e) {
+                // Token invalido o vencido: la peticion sigue sin autenticar
                 SecurityContextHolder.clearContext();
             }
         }

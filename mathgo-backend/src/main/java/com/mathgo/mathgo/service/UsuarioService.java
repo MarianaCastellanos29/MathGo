@@ -2,6 +2,7 @@ package com.mathgo.mathgo.service;
 
 import com.mathgo.mathgo.model.Usuario;
 import com.mathgo.mathgo.repository.UsuarioRepository;
+import com.mathgo.mathgo.security.PasswordUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,12 +20,20 @@ public class UsuarioService {
     }
 
     public Usuario registrarUsuario(Usuario usuario) {
+        String password = usuario.getPassword();
+        if (password != null) {
+            if (password.isBlank()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "La contraseña no puede estar vacía");
+            }
+            usuario.setPassword(PasswordUtil.encriptar(password));
+        }
         usuario.setVidas(5);
         usuario.setNivelActual(1);
         if (usuario.getRol() == null || usuario.getRol().isBlank()) {
             usuario.setRol("ALUMNO");
         }
-        // El grado es opcional al registrarse; si viene, debe ser válido
+        // El grado es opcional al registrarse; si viene, debe ser valido
         if (usuario.getGrado() != null) {
             validarGrado(usuario.getGrado());
         }

@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,6 +46,43 @@ class JwtFilterTest {
         verify(filterChain, times(1)).doFilter(request, response);
         assertNotNull(SecurityContextHolder.getContext().getAuthentication());
         assertEquals("lilo@gmail.com", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+
+    @Test
+    void doFilterInternal_tokenConRol_debeAsignarAutoridad() throws Exception {
+        String token = JwtUtil.generarToken("padre@gmail.com", "PADRE");
+        when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
+
+        jwtFilter.doFilterInternal(request, response, filterChain);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        assertNotNull(auth);
+        assertTrue(auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_PADRE")));
+    }
+
+    @Test
+    void doFilterInternal_rolEnMinusculas_seNormalizaAMayusculas() throws Exception {
+        String token = JwtUtil.generarToken("padre@gmail.com", "padre");
+        when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
+
+        jwtFilter.doFilterInternal(request, response, filterChain);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        assertTrue(auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_PADRE")));
+    }
+
+    @Test
+    void doFilterInternal_tokenSinRol_noTieneAutoridades() throws Exception {
+        String token = JwtUtil.generarToken("sinrol@gmail.com");
+        when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
+
+        jwtFilter.doFilterInternal(request, response, filterChain);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        assertNotNull(auth);
+        assertTrue(auth.getAuthorities().isEmpty());
     }
 
     @ParameterizedTest

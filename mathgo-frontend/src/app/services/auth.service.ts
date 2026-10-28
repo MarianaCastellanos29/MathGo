@@ -51,8 +51,29 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  /** Hay sesion si existe un token y no ha vencido. */
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    const token = this.getToken();
+    if (!token) return false;
+    if (this.tokenVencido(token)) {
+      localStorage.clear();
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Lee la fecha de expiracion (exp) del JWT. Si el token no se puede leer,
+   * no se considera vencido: el servidor es quien tiene la ultima palabra (401).
+   */
+  private tokenVencido(token: string): boolean {
+    try {
+      const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const datos = JSON.parse(atob(payload));
+      return typeof datos.exp === 'number' && datos.exp * 1000 <= Date.now();
+    } catch {
+      return false;
+    }
   }
 
   getToken(): string | null {

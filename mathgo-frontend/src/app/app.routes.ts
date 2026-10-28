@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: 'seleccion-grado', component: SeleccionGradoComponent },
+  { path: 'seleccion-grado', component: SeleccionGradoComponent, canActivate: [authGuard] },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
@@ -71,12 +71,14 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () => import('./components/padre/padre.component').then(m => m.PadreComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { roles: ['PADRE', 'ADMIN'] }
   },
   {
     path: 'padre',
     loadComponent: () => import('./components/padre/padre.component').then(m => m.PadreComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { roles: ['PADRE', 'ADMIN'] }
   },
   { path: '**', redirectTo: 'login' }
 ];

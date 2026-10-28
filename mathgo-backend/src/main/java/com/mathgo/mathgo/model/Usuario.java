@@ -1,5 +1,6 @@
 package com.mathgo.mathgo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,7 +10,11 @@ public class Usuario {
     private Long id;
     private String nombre;
     @Column(unique = true) private String correo;
+
+    // Nunca se envia al cliente en las respuestas JSON; solo se acepta al recibir datos
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private String rol;
     private int vidas = 5;
     private int nivelActual = 1;
