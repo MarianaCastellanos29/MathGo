@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, map, catchError } from 'rxjs';
 import { RespuestaRequest, RespuestaResponse } from '../models/models';
 
 export interface EjercicioAPI {
   pregunta: string;
   opciones: string[];
   respuestaCorrecta: string;
+  explicacion?: string;   // viene de la base de datos (ejercicios por grado)
 }
 
 @Injectable({ providedIn: 'root' })
@@ -15,8 +16,42 @@ export class EjercicioService {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   * Trae los ejercicios del GRADO del niño y del nivel pedido (GET /ejercicios/nivel/{usuarioId}/{nivel}).
+   * Si el servidor no responde o no hay ejercicios para ese grado/nivel, usa los generados aquí
+   * para que el niño nunca se quede sin jugar.
+   */
   obtenerEjerciciosAPI(nivel: number): Observable<EjercicioAPI[]> {
-    return of(this.generarEjercicios(nivel));
+    const usuarioId = Number(localStorage.getItem('usuarioId'));
+    const local = () => this.generarEjercicios(nivel);
+    if (!usuarioId) return of(local());
+
+    return this.http.get<any[]>(`${this.API}/nivel/${usuarioId}/${nivel}`).pipe(
+      map(lista => {
+        const ejercicios = (lista ?? []).map(e => this.aEjercicioAPI(e)).filter(e => e.opciones.length >= 2);
+        return ejercicios.length > 0 ? this.mezclar(ejercicios) : local();
+      }),
+      catchError(() => of(local()))
+    );
+  }
+
+  private aEjercicioAPI(e: any): EjercicioAPI {
+    const opciones: string[] = [e.opcionA, e.opcionB, e.opcionC].filter((o: any) => o !== null && o !== undefined && String(o) !== '').map(String);
+    // respuesta_correcta puede guardar el texto de la opción o la letra (A/B/C)
+    const letras: Record<string, number> = { A: 0, B: 1, C: 2 };
+    const bruta = String(e.respuestaCorrecta ?? '').trim();
+    const porLetra = letras[bruta.toUpperCase()];
+    const correcta = bruta.length === 1 && porLetra !== undefined && opciones[porLetra] !== undefined ? opciones[porLetra] : bruta;
+    return { pregunta: e.pregunta, opciones: this.mezclar(opciones), respuestaCorrecta: correcta, explicacion: e.explicacion || undefined };
+  }
+
+  private mezclar<T>(lista: T[]): T[] {
+    const a = [...lista];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
   obtenerDatoCurioso(numero: number): Observable<string> {

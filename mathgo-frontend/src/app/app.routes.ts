@@ -1,7 +1,9 @@
+import { SeleccionGradoComponent } from './seleccion-grado/seleccion-grado.component';
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+  { path: 'seleccion-grado', component: SeleccionGradoComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',

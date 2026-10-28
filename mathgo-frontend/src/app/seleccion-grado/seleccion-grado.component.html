@@ -1,0 +1,46 @@
+<div class="mg-page">
+  <app-scene></app-scene>
+
+  <main class="mg-main contenedor">
+    <div class="saludo">
+      <app-pyro class="pyro" [mood]="seleccionado ? 'happy' : 'idle'"></app-pyro>
+      <div class="burbuja">{{ seleccionado ? '¡Buena elección! 🎉' : '¡Hola! 👋' }}</div>
+    </div>
+
+    <h1>¿En qué grado estás?</h1>
+    <p class="sub">Elige tu grado y Pyro te prepara los niveles justo para ti</p>
+
+    <div class="grados">
+      <button
+        *ngFor="let g of grados; let i = index"
+        type="button"
+        class="tarjeta-grado"
+        [class.activo]="seleccionado === g.valor"
+        [style.animation-delay.ms]="i * 90"
+        (click)="elegir(g.valor)"
+        [attr.aria-pressed]="seleccionado === g.valor">
+        <span class="check" *ngIf="seleccionado === g.valor">✓</span>
+        <span class="emoji">{{ g.emoji }}</span>
+        <span class="numero">{{ g.valor }}°</span>
+        <span class="nombre">{{ g.nombre }}</span>
+      </button>
+    </div>
+
+    <div class="vista-previa" *ngIf="seleccionado">
+      <span class="etiqueta">En este grado vas a practicar</span>
+      <div class="temas">
+        <span class="tema" *ngFor="let t of temas">{{ t }}</span>
+      </div>
+    </div>
+
+    <p class="error" *ngIf="error">⚠️ {{ error }}</p>
+
+    <button
+      type="button"
+      class="mg-btn btn-continuar"
+      [disabled]="seleccionado === null || guardando"
+      (click)="continuar()">
+      {{ guardando ? 'Guardando...' : '▶ ¡Vamos a jugar!' }}
+    </button>
+  </main>
+</div>

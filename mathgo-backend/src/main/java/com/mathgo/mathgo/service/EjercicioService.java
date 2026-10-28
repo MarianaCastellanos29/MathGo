@@ -7,12 +7,16 @@ import com.mathgo.mathgo.model.Usuario;
 import com.mathgo.mathgo.repository.EjercicioRepository;
 import com.mathgo.mathgo.repository.ResultadoRepository;
 import com.mathgo.mathgo.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
 public class EjercicioService {
+
+    private static final int NIVEL_MAXIMO = 3;
 
     private final EjercicioRepository ejercicioRepository;
     private final ResultadoRepository resultadoRepository;
@@ -35,7 +39,16 @@ public class EjercicioService {
 
     public List<Ejercicio> obtenerEjerciciosPorNivelUsuario(Long usuarioId, String nivelStr) {
         int nivel = Integer.parseInt(nivelStr);
-        return ejercicioRepository.findByNivel(nivel);
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (usuario.getGrado() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "El estudiante aún no ha seleccionado su grado");
+        }
+
+        return ejercicioRepository.findByGradoAndNivel(usuario.getGrado(), nivel);
     }
 
     public RespuestaResponse responder(Long usuarioId, Long ejercicioId, String respuesta) {
@@ -51,6 +64,7 @@ public class EjercicioService {
         res.setUsuario(usuario);
         res.setPregunta(ejercicio.getPregunta());
         res.setNivel(ejercicio.getNivel());
+        res.setGrado(ejercicio.getGrado());
         res.setCorrecto(correcto);
         resultadoRepository.save(res);
 
@@ -64,11 +78,16 @@ public class EjercicioService {
             usuario.setRango(logroService.calcularRango(usuario.getXp()));
 
             int nivelActual = usuario.getNivelActual();
-            long totalDelNivel = ejercicioRepository.findByNivel(nivelActual).size();
-            long correctosDelNivel = resultadoRepository.contarCorrectosPorNivel(usuarioId, nivelActual);
+            Integer grado = usuario.getGrado();
 
-            if (correctosDelNivel >= totalDelNivel && nivelActual < 3) {
-                usuario.setNivelActual(nivelActual + 1);
+            if (grado != null) {
+                long totalDelNivel = ejercicioRepository.findByGradoAndNivel(grado, nivelActual).size();
+                long correctosDelNivel = resultadoRepository
+                        .contarCorrectosPorGradoYNivel(usuarioId, grado, nivelActual);
+
+                if (totalDelNivel > 0 && correctosDelNivel >= totalDelNivel && nivelActual < NIVEL_MAXIMO) {
+                    usuario.setNivelActual(nivelActual + 1);
+                }
             }
         } else {
             usuario.setRachaActual(0);

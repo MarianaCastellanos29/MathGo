@@ -32,4 +32,10 @@ public class Ejercicio {
     public void setRespuestaCorrecta(String respuestaCorrecta) { this.respuestaCorrecta = respuestaCorrecta; }
     public void setExplicacion(String explicacion) { this.explicacion = explicacion; }
     public void setNivel(int nivel) { this.nivel = nivel; }
+
+    @jakarta.persistence.Column(name = "grado", nullable = false, columnDefinition = "INT NOT NULL DEFAULT 1")
+    private Integer grado = 1;
+
+    public Integer getGrado() { return grado; }
+    public void setGrado(Integer grado) { this.grado = grado; }
 }

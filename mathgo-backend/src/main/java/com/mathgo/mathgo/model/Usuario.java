@@ -23,6 +23,10 @@ public class Usuario {
     @Column(length = 1000)
     private String itemsComprados = "adventurer";
 
+    // Grado escolar de primaria (1 a 5). null = el niño aún no lo ha escogido
+    @Column(name = "grado")
+    private Integer grado;
+
     public Usuario() {}
 
     public Long getId() { return id; }
@@ -39,6 +43,7 @@ public class Usuario {
     public String getMensajePadre() { return mensajePadre; }
     public String getAvatar() { return avatar; }
     public String getItemsComprados() { return itemsComprados; }
+    public Integer getGrado() { return grado; }
 
     public void setId(Long id) { this.id = id; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -54,4 +59,5 @@ public class Usuario {
     public void setMensajePadre(String mensajePadre) { this.mensajePadre = mensajePadre; }
     public void setAvatar(String avatar) { this.avatar = avatar; }
     public void setItemsComprados(String itemsComprados) { this.itemsComprados = itemsComprados; }
+    public void setGrado(Integer grado) { this.grado = grado; }
 }

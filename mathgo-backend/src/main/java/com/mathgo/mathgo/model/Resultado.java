@@ -33,4 +33,10 @@ public class Resultado {
     public void setNivel(int nivel) { this.nivel = nivel; }
     public void setCorrecto(boolean correcto) { this.correcto = correcto; }
     public void setFechaRespuesta(LocalDateTime f) { this.fechaRespuesta = f; }
+
+    @jakarta.persistence.Column(name = "grado")
+    private Integer grado;
+
+    public Integer getGrado() { return grado; }
+    public void setGrado(Integer grado) { this.grado = grado; }
 }

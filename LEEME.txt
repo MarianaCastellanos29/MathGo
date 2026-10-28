@@ -1,0 +1,13 @@
+MathGo - Pantalla "En que grado estas?" con el diseno de la app
+
+Trae SOLO 3 archivos de src/app/seleccion-grado (reemplazan los tuyos).
+No cambia la logica de guardar el grado, solo el aspecto.
+
+1) EXTRAER (PowerShell, en la raiz del proyecto):
+   Expand-Archive -Path "$HOME\Downloads\mathgo-seleccion-grado.zip" -DestinationPath . -Force
+
+2) RECONSTRUIR:
+   docker compose up -d --build
+
+Requiere que ya tengas los archivos de zips anteriores:
+src/app/shared/scene, src/app/shared/pyro y src/app/utils/niveles-grado.ts

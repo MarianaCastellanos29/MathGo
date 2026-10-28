@@ -14,4 +14,9 @@ public interface ResultadoRepository extends JpaRepository<Resultado, Long> {
 
     @Query("SELECT COUNT(r) FROM Resultado r WHERE r.usuario.id = :usuarioId AND r.nivel = :nivel AND r.correcto = true")
     long contarCorrectosPorNivel(@Param("usuarioId") Long usuarioId, @Param("nivel") int nivel);
+
+    @org.springframework.data.jpa.repository.Query("SELECT COUNT(r) FROM Resultado r WHERE r.usuario.id = :usuarioId AND r.grado = :grado AND r.nivel = :nivel AND r.correcto = true")
+    long contarCorrectosPorGradoYNivel(@org.springframework.data.repository.query.Param("usuarioId") Long usuarioId,
+                                       @org.springframework.data.repository.query.Param("grado") Integer grado,
+                                       @org.springframework.data.repository.query.Param("nivel") Integer nivel);
 }

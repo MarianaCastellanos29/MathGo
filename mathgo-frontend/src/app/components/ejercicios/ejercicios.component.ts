@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EjercicioService, EjercicioAPI } from '../../services/ejercicio.service';
 import { AuthService } from '../../services/auth.service';
 import { HistorialService } from '../../services/historial.service';
+import { MAX_NIVELES_GRADO, temaDeNivel, gradoGuardado } from '../../utils/niveles-grado';
 import { PyroComponent } from '../../shared/pyro/pyro.component';
 import { HeartsComponent } from '../../shared/hearts/hearts.component';
 
@@ -37,7 +38,7 @@ export class EjerciciosComponent implements OnInit {
   mostrarExplosion = false;
   explosionItems: any[] = [];
 
-  readonly MAX_NIVELES = 6;
+  readonly MAX_NIVELES = MAX_NIVELES_GRADO;
 
   particulas = Array.from({ length: 12 }, () => ({
     x: Math.random() * 100,
@@ -120,13 +121,17 @@ if (!Number.isNaN(numero) && numero > 0) {
       this.auth.guardarProgreso({ vidas: this.vidas }).subscribe();
       this.mensajeFeedback = `❌ Respuesta incorrecta`;
 
-      this.ejercicioService.explicarError(
-        this.ejercicioActual.pregunta,
-        this.ejercicioActual.respuestaCorrecta,
-        opcion
-      ).subscribe({
-        next: (explicacion) => this.explicacionError = explicacion
-      });
+      if (this.ejercicioActual.explicacion) {
+        this.explicacionError = `${this.ejercicioActual.explicacion}`;
+      } else {
+        this.ejercicioService.explicarError(
+          this.ejercicioActual.pregunta,
+          this.ejercicioActual.respuestaCorrecta,
+          opcion
+        ).subscribe({
+          next: (explicacion) => this.explicacionError = explicacion
+        });
+      }
 
       if (this.vidas === 0) {
         setTimeout(() => this.sinVidas = true, 1800);
@@ -204,14 +209,6 @@ if (!Number.isNaN(numero) && numero > 0) {
   }
 
   get nombreNivel(): string {
-    const nombres: Record<number, string> = {
-      1: 'Sumas',
-      2: 'Restas',
-      3: 'Multiplicación',
-      4: 'División',
-      5: 'Raíces Cuadradas',
-      6: 'Fracciones y Porcentajes'
-    };
-    return nombres[this.nivel] ?? `Nivel ${this.nivel}`;
+    return temaDeNivel(gradoGuardado(), this.nivel);
   }
 }

@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface EjercicioRepository extends JpaRepository<Ejercicio, Long> {
     List<Ejercicio> findByNivel(int nivel);
+
+    java.util.List<Ejercicio> findByGradoAndNivel(Integer grado, Integer nivel);
 }

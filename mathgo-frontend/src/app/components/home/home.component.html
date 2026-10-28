@@ -42,25 +42,54 @@
     </section>
 
     <section class="niveles">
-      <h2>🎮 Selecciona un nivel</h2>
-      <p class="sub">Completa cada nivel para desbloquear el siguiente</p>
+      <div class="grado-chip" *ngIf="grado">
+        <span class="mg-pill">🎒 {{ etiquetaGrado }}</span>
+        <button class="mg-pill cambiar" (click)="cambiarGrado()">↻ Cambiar grado</button>
+      </div>
+      <h2>🗺️ Tu aventura</h2>
+      <p class="sub" *ngIf="grado">Estos son los niveles de {{ etiquetaGrado | lowercase }}. ¡Termina uno para descubrir el siguiente!</p>
 
-      <div class="niveles-grid">
-        <button *ngFor="let nv of niveles"
-                class="nivel"
-                [class.actual]="nv.id === nivelActual"
-                [class.hecho]="nv.id < nivelActual"
-                [class.bloqueado]="nv.id > nivelActual"
-                (click)="seleccionarNivel(nv.id)"
-                [attr.aria-label]="nv.nombre + ' - ' + nv.descripcion">
-          <img *ngIf="nv.img" class="emoji-img" [src]="nv.img" alt="" />
-          <span class="emoji" *ngIf="!nv.img">{{ nv.emoji }}</span>
-          <h3>{{ nv.nombre }}</h3>
-          <p>{{ nv.descripcion }}</p>
-          <span class="estado">
-            {{ nv.id < nivelActual ? '✓ Repetir' : nv.id === nivelActual ? '▶ Jugar' : '🔒 Bloqueado' }}
-          </span>
-        </button>
+      <div class="mg-loading" *ngIf="cargandoGrado">⏳ Preparando tus niveles...</div>
+
+      <div class="mg-card sin-grado" *ngIf="!cargandoGrado && !grado">
+        <app-pyro class="sg-pyro" mood="idle"></app-pyro>
+        <p>Cuéntanos en qué grado estás para mostrarte tus niveles.</p>
+        <button class="mg-btn" (click)="cambiarGrado()">🎒 Elegir mi grado</button>
+      </div>
+
+      <div class="ruta" *ngIf="!cargandoGrado && grado">
+        <ng-container *ngFor="let item of mapa; let i = index">
+          <span class="camino" *ngIf="i > 0" [style.animation-delay.ms]="i * 160"></span>
+
+          <button class="nivel"
+                  [class.actual]="item.estado === 'actual'"
+                  [class.hecho]="item.estado === 'hecho'"
+                  [class.misterio]="item.estado === 'misterio'"
+                  [style.animation-delay.ms]="i * 160"
+                  [disabled]="item.estado === 'misterio'"
+                  (click)="seleccionarNivel(item)"
+                  [attr.aria-label]="item.estado === 'misterio' ? 'Nivel por descubrir' : item.nivel.nombre + ': ' + item.nivel.tema">
+
+            <app-pyro *ngIf="item.estado === 'actual'" class="guia" mood="happy"></app-pyro>
+            <span class="insignia" *ngIf="item.estado === 'hecho'">✓</span>
+
+            <ng-container *ngIf="item.estado !== 'misterio'; else secreto">
+              <img *ngIf="item.nivel.img" class="emoji-img" [src]="item.nivel.img" alt="" />
+              <span class="emoji" *ngIf="!item.nivel.img">{{ item.nivel.emoji }}</span>
+              <small>{{ item.nivel.nombre }}</small>
+              <h3>{{ item.nivel.tema }}</h3>
+              <p>{{ item.nivel.descripcion }}</p>
+              <span class="estado">{{ item.estado === 'actual' ? '▶ ¡Jugar!' : '↻ Repetir' }}</span>
+            </ng-container>
+
+            <ng-template #secreto>
+              <span class="emoji candado">🎁</span>
+              <small>{{ item.nivel.nombre }}</small>
+              <h3>¡Sorpresa!</h3>
+              <p>Termina el nivel anterior para descubrirlo</p>
+            </ng-template>
+          </button>
+        </ng-container>
       </div>
     </section>
 

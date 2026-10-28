@@ -5,3 +5,6 @@ dist/
 todos-los-logs.txt
  target/ 
 mathgo-backend/target/
+
+*.bak
+docker-logs.txt
