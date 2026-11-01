@@ -79,6 +79,7 @@ Un `ALUMNO` solo puede acceder a su propio `id`. `PADRE` y `ADMIN` pueden accede
 | `GET /progreso/{usuarioId}` |
 | `GET /usuarios/{id}`, `PUT /usuarios/{id}/progreso`, `POST /usuarios/{id}/dar-vidas` y `GET /usuarios/{id}/reporte-semanal` |
 | `GET` y `PUT /usuarios/{id}/grado` |
+| `POST /usuarios/{id}/grado/nivel-completado` (solo el propio alumno) |
 
 `GET /usuarios/{id}/mensaje` es solo para el propio usuario, porque leer el mensaje lo borra.
 

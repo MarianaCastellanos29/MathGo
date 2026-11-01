@@ -2,19 +2,22 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
+import { SelectorIdiomaComponent } from '../../shared/selector-idioma/selector-idioma.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslateModule, SelectorIdiomaComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   correo = '';
   password = '';
+  /** Clave de traduccion del error (se traduce en la plantilla, asi cambia con el idioma). */
   error = '';
   cargando = false;
   mensajePadre = '';
@@ -54,7 +57,7 @@ export class LoginComponent {
       },
       error: () => {
         this.cargando = false;
-        this.error = 'Correo o contraseña incorrectos';
+        this.error = 'LOGIN.ERROR_CREDENCIALES';
       }
     });
   }

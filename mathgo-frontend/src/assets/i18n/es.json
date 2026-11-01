@@ -1,0 +1,209 @@
+{
+  "IDIOMA": {
+    "ETIQUETA": "Idioma"
+  },
+  "COMUN": {
+    "CORREO": "Correo electrónico",
+    "CONTRASENA": "Contraseña",
+    "PLACEHOLDER_CORREO": "tu@correo.com"
+  },
+  "NAV": {
+    "MARCA_ARIA": "MathGo, inicio",
+    "PRINCIPAL": "Principal",
+    "INICIO": "Inicio",
+    "PROGRESO": "Progreso",
+    "LOGROS": "Logros",
+    "TIENDA": "Tienda",
+    "JUEGOS": "Juegos",
+    "APOYO": "Apoyo",
+    "PERFIL": "Perfil",
+    "MI_PERFIL": "Mi perfil",
+    "SALIR": "Salir"
+  },
+  "LOGIN": {
+    "SALUDO": "¡Hola de<br>nuevo!",
+    "SUBTITULO": "Continúa tu aventura<br>matemática",
+    "IR_A_REGISTRO": "Crear cuenta",
+    "TITULO": "Iniciar sesión",
+    "ENTRANDO": "Entrando...",
+    "ENTRAR": "¡Entrar!",
+    "SIN_CUENTA": "¿No tienes cuenta?",
+    "REGISTRATE_AQUI": "Regístrate aquí",
+    "ERROR_CREDENCIALES": "Correo o contraseña incorrectos",
+    "MENSAJE_FAMILIA": "Mensaje de tu familia",
+    "TIENES_MENSAJE": "¡Tienes un mensaje!",
+    "GRACIAS": "¡Gracias!",
+    "IR_A_JUGAR": "Ir a jugar"
+  },
+  "REGISTRO": {
+    "SALUDO": "¡Bienvenido,<br>campeón!",
+    "SUBTITULO": "Crea tu cuenta y empieza<br>a aprender matemáticas",
+    "YA_TENGO_CUENTA": "Ya tengo cuenta",
+    "TITULO": "Crear cuenta",
+    "NOMBRE": "Nombre completo",
+    "PLACEHOLDER_NOMBRE": "Tu nombre",
+    "PLACEHOLDER_PASSWORD": "Mínimo 6 caracteres",
+    "SOY": "Soy...",
+    "ROL_ALUMNO": "Alumno (niño)",
+    "ROL_PADRE": "Padre / Madre",
+    "CREANDO": "Creando cuenta...",
+    "CREAR": "¡Crear cuenta!",
+    "YA_TIENES_CUENTA": "¿Ya tienes cuenta?",
+    "INICIA_SESION": "Inicia sesión",
+    "CUENTA_CREADA": "¡Cuenta creada! Redirigiendo...",
+    "ERROR_REGISTRO": "Error al registrarse. Verifica los datos."
+  },
+  "HOME": {
+    "HOLA": "¡Hola,",
+    "LISTO": "¿Listo para practicar?",
+    "FRASE": "Las matemáticas también son una gran aventura.",
+    "PROGRESO_GENERAL": "Tu progreso general",
+    "NIVEL_N": "Nivel {{n}}",
+    "VAS_MUY_BIEN": "¡Vas muy bien!",
+    "SIGUE_ASI": "¡Sigue así, tú puedes!",
+    "TUS_VIDAS": "Tus vidas",
+    "RECARGAR_VIDAS": "Recargar vidas",
+    "CAMBIAR_GRADO": "Cambiar grado",
+    "TU_AVENTURA": "Tu aventura",
+    "SUB_NIVELES": "Estos son los niveles de {{grado}}. ¡Termina uno para descubrir el siguiente!",
+    "PREPARANDO": "Preparando tus niveles...",
+    "SIN_GRADO": "Cuéntanos en qué grado estás para mostrarte tus niveles.",
+    "ELEGIR_GRADO": "Elegir mi grado",
+    "NIVEL_POR_DESCUBRIR": "Nivel por descubrir",
+    "JUGAR": "¡Jugar!",
+    "REPETIR": "Repetir",
+    "SORPRESA": "¡Sorpresa!",
+    "TERMINA_ANTERIOR": "Termina el nivel anterior para descubrirlo",
+    "MAS_SECCIONES": "Más secciones",
+    "ACCESOS": {
+      "JUEGOS": "Juegos",
+      "APOYO": "Apoyo",
+      "LOGROS": "Mis logros",
+      "HISTORIAL": "Mi historial",
+      "TIENDA": "Tienda",
+      "PANEL_PADRE": "Panel Padre"
+    },
+    "GRADO_COMPLETADO": "¡Terminaste {{grado}}!",
+    "GRADO_COMPLETADO_TEXTO": "Puedes repetir los niveles para ganar monedas o elegir otro grado.",
+    "ELEGIR_OTRO_GRADO": "Elegir otro grado"
+  },
+  "GRADO": {
+    "NOMBRE": {
+      "0": "Tu grado",
+      "1": "Primer grado",
+      "2": "Segundo grado",
+      "3": "Tercer grado",
+      "4": "Cuarto grado",
+      "5": "Quinto grado"
+    },
+    "EN_FRASE": {
+      "0": "tu grado",
+      "1": "primer grado",
+      "2": "segundo grado",
+      "3": "tercer grado",
+      "4": "cuarto grado",
+      "5": "quinto grado"
+    }
+  },
+  "NIVELES": {
+    "1": {
+      "1": {
+        "TEMA": "Sumas",
+        "DESCRIPCION": "Suma hasta 10"
+      },
+      "2": {
+        "TEMA": "Restas",
+        "DESCRIPCION": "Resta hasta 10"
+      },
+      "3": {
+        "TEMA": "Sumas y restas",
+        "DESCRIPCION": "Con números hasta 20"
+      }
+    },
+    "2": {
+      "1": {
+        "TEMA": "Sumas grandes",
+        "DESCRIPCION": "Sumas de dos cifras"
+      },
+      "2": {
+        "TEMA": "Restas grandes",
+        "DESCRIPCION": "Restas de dos cifras"
+      },
+      "3": {
+        "TEMA": "Multiplicación",
+        "DESCRIPCION": "Las primeras tablas"
+      }
+    },
+    "3": {
+      "1": {
+        "TEMA": "Multiplicación",
+        "DESCRIPCION": "Tablas del 4 al 9"
+      },
+      "2": {
+        "TEMA": "División",
+        "DESCRIPCION": "Reparte en partes iguales"
+      },
+      "3": {
+        "TEMA": "Problemas",
+        "DESCRIPCION": "Historias con operaciones"
+      }
+    },
+    "4": {
+      "1": {
+        "TEMA": "Multiplicación grande",
+        "DESCRIPCION": "Números más grandes"
+      },
+      "2": {
+        "TEMA": "Fracciones",
+        "DESCRIPCION": "Sumas, restas y comparación"
+      },
+      "3": {
+        "TEMA": "División y problemas",
+        "DESCRIPCION": "Divide y resuelve"
+      }
+    },
+    "5": {
+      "1": {
+        "TEMA": "Decimales",
+        "DESCRIPCION": "Operaciones con comas"
+      },
+      "2": {
+        "TEMA": "Porcentajes",
+        "DESCRIPCION": "El 10%, el 25%, el 50%"
+      },
+      "3": {
+        "TEMA": "Geometría",
+        "DESCRIPCION": "Área y perímetro"
+      }
+    }
+  },
+  "EJERCICIOS": {
+    "PREPARANDO": "Pyro está preparando los ejercicios...",
+    "SIN_VIDAS": "¡Sin vidas!",
+    "SIN_VIDAS_TEXTO": "Pyro está triste... Ve a la tienda para conseguir más",
+    "INICIO": "Inicio",
+    "COMPLETADO": "¡{{nombre}} completado!",
+    "ORGULLOSO": "Pyro está muy orgulloso de ti",
+    "CORRECTAS": "Correctas",
+    "MONEDAS": "Monedas",
+    "RACHA": "Racha",
+    "VIDAS": "Vidas",
+    "SABIAS_QUE": "¿Sabías que...?",
+    "SIGUIENTE_NIVEL": "Siguiente nivel",
+    "VOLVER_INICIO": "Volver al inicio",
+    "SALIR": "Salir del ejercicio",
+    "SILENCIAR": "Silenciar sonidos",
+    "ACTIVAR_SONIDO": "Activar sonidos",
+    "NIVEL_TAG": "Nivel {{nivel}} — {{tema}} • {{actual}}/{{total}}",
+    "PISTA": "Pista",
+    "TU_PUEDES": "¡Tú puedes!",
+    "FUEGO": "¡Fuego!",
+    "ANIMO": "¡Ánimo!",
+    "CORRECTO": "¡Correcto!",
+    "INCORRECTO": "Respuesta incorrecta",
+    "SIGUIENTE": "Siguiente",
+    "TERMINAR": "Terminar",
+    "GRADO_COMPLETADO": "¡Completaste {{grado}}! Eres increíble.",
+    "ELEGIR_OTRO_GRADO": "Elegir otro grado"
+  }
+}

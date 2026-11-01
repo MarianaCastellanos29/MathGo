@@ -1,0 +1,209 @@
+{
+  "IDIOMA": {
+    "ETIQUETA": "Language"
+  },
+  "COMUN": {
+    "CORREO": "Email address",
+    "CONTRASENA": "Password",
+    "PLACEHOLDER_CORREO": "you@email.com"
+  },
+  "NAV": {
+    "MARCA_ARIA": "MathGo, home",
+    "PRINCIPAL": "Main",
+    "INICIO": "Home",
+    "PROGRESO": "Progress",
+    "LOGROS": "Awards",
+    "TIENDA": "Shop",
+    "JUEGOS": "Games",
+    "APOYO": "Help",
+    "PERFIL": "Profile",
+    "MI_PERFIL": "My profile",
+    "SALIR": "Exit"
+  },
+  "LOGIN": {
+    "SALUDO": "Welcome<br>back!",
+    "SUBTITULO": "Continue your<br>math adventure",
+    "IR_A_REGISTRO": "Create account",
+    "TITULO": "Sign in",
+    "ENTRANDO": "Signing in...",
+    "ENTRAR": "Let's go!",
+    "SIN_CUENTA": "Don't have an account?",
+    "REGISTRATE_AQUI": "Sign up here",
+    "ERROR_CREDENCIALES": "Incorrect email or password",
+    "MENSAJE_FAMILIA": "Message from your family",
+    "TIENES_MENSAJE": "You have a message!",
+    "GRACIAS": "Thank you!",
+    "IR_A_JUGAR": "Let's play"
+  },
+  "REGISTRO": {
+    "SALUDO": "Welcome,<br>champion!",
+    "SUBTITULO": "Create your account and start<br>learning math",
+    "YA_TENGO_CUENTA": "I already have an account",
+    "TITULO": "Create account",
+    "NOMBRE": "Full name",
+    "PLACEHOLDER_NOMBRE": "Your name",
+    "PLACEHOLDER_PASSWORD": "At least 6 characters",
+    "SOY": "I am...",
+    "ROL_ALUMNO": "Student (child)",
+    "ROL_PADRE": "Parent",
+    "CREANDO": "Creating account...",
+    "CREAR": "Create account!",
+    "YA_TIENES_CUENTA": "Already have an account?",
+    "INICIA_SESION": "Sign in",
+    "CUENTA_CREADA": "Account created! Redirecting...",
+    "ERROR_REGISTRO": "Could not register. Please check your details."
+  },
+  "HOME": {
+    "HOLA": "Hello,",
+    "LISTO": "Ready to practice?",
+    "FRASE": "Math is also a great adventure.",
+    "PROGRESO_GENERAL": "Your overall progress",
+    "NIVEL_N": "Level {{n}}",
+    "VAS_MUY_BIEN": "You're doing great!",
+    "SIGUE_ASI": "Keep it up, you can do it!",
+    "TUS_VIDAS": "Your lives",
+    "RECARGAR_VIDAS": "Refill lives",
+    "CAMBIAR_GRADO": "Change grade",
+    "TU_AVENTURA": "Your adventure",
+    "SUB_NIVELES": "These are the {{grado}} levels. Finish one to unlock the next!",
+    "PREPARANDO": "Getting your levels ready...",
+    "SIN_GRADO": "Tell us what grade you're in so we can show you your levels.",
+    "ELEGIR_GRADO": "Choose my grade",
+    "NIVEL_POR_DESCUBRIR": "Level to be discovered",
+    "JUGAR": "Play!",
+    "REPETIR": "Repeat",
+    "SORPRESA": "Surprise!",
+    "TERMINA_ANTERIOR": "Finish the previous level to unlock it",
+    "MAS_SECCIONES": "More sections",
+    "ACCESOS": {
+      "JUEGOS": "Games",
+      "APOYO": "Help",
+      "LOGROS": "My awards",
+      "HISTORIAL": "My history",
+      "TIENDA": "Shop",
+      "PANEL_PADRE": "Parent panel"
+    },
+    "GRADO_COMPLETADO": "You finished {{grado}}!",
+    "GRADO_COMPLETADO_TEXTO": "You can replay the levels to earn coins or pick another grade.",
+    "ELEGIR_OTRO_GRADO": "Choose another grade"
+  },
+  "GRADO": {
+    "NOMBRE": {
+      "0": "Your grade",
+      "1": "First grade",
+      "2": "Second grade",
+      "3": "Third grade",
+      "4": "Fourth grade",
+      "5": "Fifth grade"
+    },
+    "EN_FRASE": {
+      "0": "your grade",
+      "1": "first grade",
+      "2": "second grade",
+      "3": "third grade",
+      "4": "fourth grade",
+      "5": "fifth grade"
+    }
+  },
+  "NIVELES": {
+    "1": {
+      "1": {
+        "TEMA": "Addition",
+        "DESCRIPCION": "Add up to 10"
+      },
+      "2": {
+        "TEMA": "Subtraction",
+        "DESCRIPCION": "Subtract up to 10"
+      },
+      "3": {
+        "TEMA": "Addition and subtraction",
+        "DESCRIPCION": "With numbers up to 20"
+      }
+    },
+    "2": {
+      "1": {
+        "TEMA": "Big additions",
+        "DESCRIPCION": "Two-digit additions"
+      },
+      "2": {
+        "TEMA": "Big subtractions",
+        "DESCRIPCION": "Two-digit subtractions"
+      },
+      "3": {
+        "TEMA": "Multiplication",
+        "DESCRIPCION": "The first times tables"
+      }
+    },
+    "3": {
+      "1": {
+        "TEMA": "Multiplication",
+        "DESCRIPCION": "Times tables from 4 to 9"
+      },
+      "2": {
+        "TEMA": "Division",
+        "DESCRIPCION": "Share into equal parts"
+      },
+      "3": {
+        "TEMA": "Word problems",
+        "DESCRIPCION": "Stories with operations"
+      }
+    },
+    "4": {
+      "1": {
+        "TEMA": "Big multiplication",
+        "DESCRIPCION": "Bigger numbers"
+      },
+      "2": {
+        "TEMA": "Fractions",
+        "DESCRIPCION": "Adding, subtracting and comparing"
+      },
+      "3": {
+        "TEMA": "Division and problems",
+        "DESCRIPCION": "Divide and solve"
+      }
+    },
+    "5": {
+      "1": {
+        "TEMA": "Decimals",
+        "DESCRIPCION": "Operations with decimals"
+      },
+      "2": {
+        "TEMA": "Percentages",
+        "DESCRIPCION": "10%, 25% and 50%"
+      },
+      "3": {
+        "TEMA": "Geometry",
+        "DESCRIPCION": "Area and perimeter"
+      }
+    }
+  },
+  "EJERCICIOS": {
+    "PREPARANDO": "Pyro is getting your exercises ready...",
+    "SIN_VIDAS": "Out of lives!",
+    "SIN_VIDAS_TEXTO": "Pyro is sad... Visit the shop to get more",
+    "INICIO": "Home",
+    "COMPLETADO": "{{nombre}} completed!",
+    "ORGULLOSO": "Pyro is very proud of you",
+    "CORRECTAS": "Correct",
+    "MONEDAS": "Coins",
+    "RACHA": "Streak",
+    "VIDAS": "Lives",
+    "SABIAS_QUE": "Did you know...?",
+    "SIGUIENTE_NIVEL": "Next level",
+    "VOLVER_INICIO": "Back to home",
+    "SALIR": "Leave exercise",
+    "SILENCIAR": "Mute sounds",
+    "ACTIVAR_SONIDO": "Turn sounds on",
+    "NIVEL_TAG": "Level {{nivel}} — {{tema}} • {{actual}}/{{total}}",
+    "PISTA": "Hint",
+    "TU_PUEDES": "You can do it!",
+    "FUEGO": "On fire!",
+    "ANIMO": "Keep going!",
+    "CORRECTO": "Correct!",
+    "INCORRECTO": "Wrong answer",
+    "SIGUIENTE": "Next",
+    "TERMINAR": "Finish",
+    "GRADO_COMPLETADO": "You completed {{grado}}! You are amazing.",
+    "ELEGIR_OTRO_GRADO": "Choose another grade"
+  }
+}

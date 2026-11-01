@@ -47,8 +47,15 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.clear();
+    this.limpiarSesion();
     this.router.navigate(['/login']);
+  }
+
+  /** Borra los datos de sesion, pero conserva el idioma elegido. */
+  private limpiarSesion(): void {
+    const idioma = localStorage.getItem('idioma');
+    localStorage.clear();
+    if (idioma) localStorage.setItem('idioma', idioma);
   }
 
   /** Hay sesion si existe un token y no ha vencido. */
@@ -56,7 +63,7 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return false;
     if (this.tokenVencido(token)) {
-      localStorage.clear();
+      this.limpiarSesion();
       return false;
     }
     return true;

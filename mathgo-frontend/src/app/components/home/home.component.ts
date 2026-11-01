@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { NavComponent } from '../../shared/nav/nav.component';
 import { SceneComponent } from '../../shared/scene/scene.component';
@@ -9,6 +10,12 @@ import { HeartsComponent } from '../../shared/hearts/hearts.component';
 import { GradoService } from '../../services/grado.service';
 import { obtenerSesion } from '../../services/grado-utils';
 import { NivelGrado, nivelesDeGrado, etiquetaGrado, gradoGuardado } from '../../utils/niveles-grado';
+import {
+  claveGradoEnFrase,
+  claveGradoNombre,
+  claveNivelDescripcion,
+  claveNivelTema
+} from '../../utils/claves-traduccion';
 
 type EstadoNivel = 'hecho' | 'actual' | 'misterio';
 interface NivelMapa { nivel: NivelGrado; estado: EstadoNivel; }
@@ -16,13 +23,15 @@ interface NivelMapa { nivel: NivelGrado; estado: EstadoNivel; }
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, NavComponent, PyroComponent, HeartsComponent, SceneComponent],
+  imports: [CommonModule, RouterLink, TranslateModule, NavComponent, PyroComponent, HeartsComponent, SceneComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   nombre: string = '';
   nivelActual: number = 1;
+  /** Niveles ya terminados en el grado actual (0 a 3). */
+  nivelesCompletados = 0;
   vidas: number = 5;
   avatarUrl: string = '';
   xp: number = 0;
@@ -46,6 +55,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.nombre      = this.auth.getNombre();
     this.nivelActual = this.auth.getNivelActual();
+    const guardados = localStorage.getItem('nivelesCompletados');
+    this.nivelesCompletados = guardados !== null && guardados !== '' && !Number.isNaN(Number(guardados))
+      ? Number(guardados)
+      : Math.max(0, this.nivelActual - 1);
     this.vidas       = this.auth.getVidas();
     this.avatarUrl   = this.auth.getAvatarUrl();
     this.xp          = this.auth.getXp();
@@ -61,9 +74,15 @@ export class HomeComponent implements OnInit {
       this.gradoService.consultarGrado(id).subscribe({
         next: (r) => {
           if (r.grado) localStorage.setItem('grado', String(r.grado));
-          if (r.nivelActual > this.nivelActual) {
+          // El servidor es la fuente de verdad del nivel. Antes solo se aceptaba si era mayor,
+          // y al cambiar de grado se quedaba el nivel del grado anterior.
+          if (typeof r.nivelActual === 'number' && r.nivelActual >= 1) {
             this.nivelActual = r.nivelActual;
             localStorage.setItem('nivelActual', String(r.nivelActual));
+          }
+          if (typeof r.nivelesCompletados === 'number') {
+            this.nivelesCompletados = r.nivelesCompletados;
+            localStorage.setItem('nivelesCompletados', String(r.nivelesCompletados));
           }
           this.aplicarGrado(r.grado ?? this.grado);
           this.cargandoGrado = false;
@@ -84,12 +103,13 @@ export class HomeComponent implements OnInit {
 
   private construirMapa(): NivelMapa[] {
     if (!this.grado) return [];
-    const actual = Math.min(Math.max(this.nivelActual, 1), this.niveles.length);
+    // Con el avance por grado: los niveles hasta "hechos" están completos, el siguiente es el actual
+    const hechos = Math.min(Math.max(this.nivelesCompletados, 0), this.niveles.length);
     const lista: NivelMapa[] = [];
     for (const nivel of this.niveles) {
-      if (nivel.id < actual) lista.push({ nivel, estado: 'hecho' });
-      else if (nivel.id === actual) lista.push({ nivel, estado: 'actual' });
-      else if (nivel.id === actual + 1) lista.push({ nivel, estado: 'misterio' });
+      if (nivel.id <= hechos) lista.push({ nivel, estado: 'hecho' });
+      else if (nivel.id === hechos + 1) lista.push({ nivel, estado: 'actual' });
+      else if (nivel.id === hechos + 2) lista.push({ nivel, estado: 'misterio' });
     }
     return lista;
   }
@@ -113,7 +133,13 @@ export class HomeComponent implements OnInit {
 
   /** % de niveles completados (nivel 1 = 0%). */
   get progresoGeneral(): number {
-    return Math.round(((this.nivelActual - 1) / this.niveles.length) * 100);
+    const hechos = Math.min(Math.max(this.nivelesCompletados, 0), this.niveles.length);
+    return Math.round((hechos / this.niveles.length) * 100);
+  }
+
+  /** true cuando el niño ya terminó los 3 niveles de su grado. */
+  get gradoCompletado(): boolean {
+    return this.grado !== null && this.nivelesCompletados >= this.niveles.length;
   }
 
   get mensajeProgreso(): string {
@@ -123,4 +149,19 @@ export class HomeComponent implements OnInit {
   get corazones(): string {
     return '❤️'.repeat(this.vidas) + '🖤'.repeat(Math.max(0, 5 - this.vidas));
   }
+
+  // ----- Claves de traducción usadas por la plantilla -----
+
+  /** Clave del mensaje de progreso (mensajeProgreso se conserva por compatibilidad). */
+  get claveMensajeProgreso(): string {
+    return this.progresoGeneral >= 50 ? 'HOME.VAS_MUY_BIEN' : 'HOME.SIGUE_ASI';
+  }
+
+  get claveGrado(): string { return claveGradoNombre(this.grado); }
+
+  get claveGradoEnFrase(): string { return claveGradoEnFrase(this.grado); }
+
+  claveTema(item: NivelMapa): string { return claveNivelTema(this.grado, item.nivel.id); }
+
+  claveDescripcion(item: NivelMapa): string { return claveNivelDescripcion(this.grado, item.nivel.id); }
 }
