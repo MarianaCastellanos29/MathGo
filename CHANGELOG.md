@@ -2,7 +2,7 @@
 
 Todos los cambios importantes del proyecto MathGo se documentan aquí.
 
-## [Sin publicar] - 2026-10-28
+
 
 ### Agregado
 - Selección de grado escolar (1 a 5) para los alumnos, con `GradoController` y componentes de frontend.
@@ -30,7 +30,4 @@ Todos los cambios importantes del proyecto MathGo se documentan aquí.
 - Un `403` o un `400` ya no se convierte en `401` al pasar por `/error`.
 - Las rutas de Angular dan `404` al recargar la página en nginx.
 
-### Pendiente
-- Mover los secretos de `docker-compose.yml` a un archivo `.env`.
-- Internacionalización (i18n/l10n).
-- Módulo de backup.
+
