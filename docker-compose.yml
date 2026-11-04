@@ -1,17 +1,34 @@
-version: '3.8'
-
 services:
 
   mysql:
     image: mysql:8.0
     container_name: mathgo-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: Mariana02
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: mathgo_db
     ports:
       - "3307:3306"
     volumes:
       - mathgo-mysql-data:/var/lib/mysql
+
+  backup:
+    image: mysql:8.0
+    container_name: mathgo-backup
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: mathgo_db
+      BACKUP_INTERVALO_HORAS: "24"   # cada cuántas horas respalda
+      BACKUP_MAXIMO: "14"            # cuántos respaldos conserva
+    volumes:
+      - ./backups:/backups
+      - ./backup:/scripts:ro
+    # tr -d '\r' evita errores si Windows convirtió el script a saltos de línea CRLF
+    entrypoint: ["/bin/bash", "-c", "tr -d '\\r' < /scripts/backup-loop.sh > /tmp/backup.sh && exec bash /tmp/backup.sh"]
+    restart: unless-stopped
 
   backend:
     build: ./mathgo-backend
@@ -21,7 +38,7 @@ services:
     environment:
       DB_URL: jdbc:mysql://mysql:3306/mathgo_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       DB_USER: root
-      DB_PASSWORD: Mariana02
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       JWT_SECRET: mathgo-super-secret-key-2024-min32chars!!!
       JWT_EXPIRATION: 86400000
     depends_on:

@@ -8,3 +8,10 @@ mathgo-backend/target/
 
 *.bak
 docker-logs.txt
+
+# Respaldos de la base de datos (contienen datos reales, no se suben)
+backups/
+
+.env
+
+.env
