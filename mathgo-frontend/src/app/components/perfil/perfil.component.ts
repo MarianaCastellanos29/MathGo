@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { TiendaService } from '../../services/tienda.service';
 
@@ -10,7 +11,7 @@ import { SceneComponent } from '../../shared/scene/scene.component';
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
+  imports: [CommonModule, RouterLink, TranslateModule, NavComponent, SceneComponent],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss']
 })
@@ -19,6 +20,7 @@ export class PerfilComponent implements OnInit {
   avatarSeleccionado: string = 'adventurer';
   guardado: boolean = false;
 
+  /** El nombre visible se traduce con la clave AVATARES.<id>.NOMBRE; "nombre" se conserva por compatibilidad. */
   estilos = [
     { id: 'adventurer', nombre: 'Aventurero' },
     { id: 'pixel-art',  nombre: 'Pixel Art' },

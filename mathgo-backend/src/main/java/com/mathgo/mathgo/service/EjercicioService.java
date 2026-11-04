@@ -7,6 +7,7 @@ import com.mathgo.mathgo.model.Usuario;
 import com.mathgo.mathgo.repository.EjercicioRepository;
 import com.mathgo.mathgo.repository.ResultadoRepository;
 import com.mathgo.mathgo.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,6 +24,13 @@ public class EjercicioService {
     private final UsuarioRepository usuarioRepository;
     private final LogroService logroService;
 
+    /**
+     * Traduce los ejercicios al idioma de la petición. Es opcional (inyección por campo) para no
+     * cambiar el constructor: si no está disponible, los ejercicios se devuelven en español.
+     */
+    @Autowired(required = false)
+    private TraduccionEjercicioService traduccion;
+
     public EjercicioService(EjercicioRepository ejercicioRepository,
                             ResultadoRepository resultadoRepository,
                             UsuarioRepository usuarioRepository,
@@ -34,7 +42,7 @@ public class EjercicioService {
     }
 
     public List<Ejercicio> obtenerEjercicios() {
-        return ejercicioRepository.findAll();
+        return localizar(ejercicioRepository.findAll());
     }
 
     public List<Ejercicio> obtenerEjerciciosPorNivelUsuario(Long usuarioId, String nivelStr) {
@@ -48,7 +56,11 @@ public class EjercicioService {
                     "El estudiante aún no ha seleccionado su grado");
         }
 
-        return ejercicioRepository.findByGradoAndNivel(usuario.getGrado(), nivel);
+        return localizar(ejercicioRepository.findByGradoAndNivel(usuario.getGrado(), nivel));
+    }
+
+    private List<Ejercicio> localizar(List<Ejercicio> ejercicios) {
+        return traduccion == null ? ejercicios : traduccion.localizar(ejercicios);
     }
 
     public RespuestaResponse responder(Long usuarioId, Long ejercicioId, String respuesta) {

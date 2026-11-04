@@ -1,13 +1,25 @@
-MathGo - Pantalla "En que grado estas?" con el diseno de la app
-
-Trae SOLO 3 archivos de src/app/seleccion-grado (reemplazan los tuyos).
-No cambia la logica de guardar el grado, solo el aspecto.
+MathGo - Internacionalizacion (ES/EN) + Backup de la base de datos
+Construido SOBRE tu rama seguridad-jwt. No toca nada de tu seguridad
+(JWT, BCrypt, roles, interceptor, guard, SecurityConfig).
 
 1) EXTRAER (PowerShell, en la raiz del proyecto):
-   Expand-Archive -Path "$HOME\Downloads\mathgo-seleccion-grado.zip" -DestinationPath . -Force
+   git checkout seguridad-jwt
+   Expand-Archive -Path "$HOME\Downloads\mathgo-i18n-backup.zip" -DestinationPath . -Force
 
-2) RECONSTRUIR:
+2) LEVANTAR TODO (incluye el nuevo contenedor de backup):
    docker compose up -d --build
+   docker compose ps                      (deben verse 5: mysql, backend, frontend, backup, sonarqube)
+   docker compose logs backup --tail 20   (debe decir: [backup] OK -> mathgo_....sql)
 
-Requiere que ya tengas los archivos de zips anteriores:
-src/app/shared/scene, src/app/shared/pyro y src/app/utils/niveles-grado.ts
+3) PROBAR i18n: abre http://localhost:4200, entra y pulsa ES | EN en la barra.
+   Mira Inicio, Historial (fechas) y la barra de monedas (12.500 vs 12,500).
+
+4) PROBAR backup: revisa que exista un .sql en la carpeta backups/ y prueba
+   .\backup\respaldar-ahora.ps1   (guia completa en backup\README.md)
+
+DOCUMENTOS NUEVOS: docs/I18N.md y backup/README.md.
+Tambien se marcaron como hechos esos dos pendientes en docs/SEGURIDAD.md y
+se agrego la entrada en CHANGELOG.md.
+
+NOTA: el servicio de backup usa la clave de MySQL que ya esta en docker-compose.yml.
+Si la cambias (por ejemplo al moverla a un .env), cambiala tambien en el servicio backup.

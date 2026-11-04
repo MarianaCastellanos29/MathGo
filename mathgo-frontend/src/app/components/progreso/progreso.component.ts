@@ -8,10 +8,11 @@ import { ProgresoResponse } from '../../models/models';
 import { NavComponent } from '../../shared/nav/nav.component';
 import { SceneComponent } from '../../shared/scene/scene.component';
 
+import { TraducirPipe } from '../../i18n/i18n.pipes';
 @Component({
   selector: 'app-progreso',
   standalone: true,
-  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
+  imports: [CommonModule, RouterLink, NavComponent, SceneComponent, TraducirPipe],
   templateUrl: './progreso.component.html',
   styleUrls: ['./progreso.component.scss']
 })

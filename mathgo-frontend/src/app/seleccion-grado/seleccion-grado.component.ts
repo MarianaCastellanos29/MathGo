@@ -7,10 +7,12 @@ import { nivelesDeGrado } from '../utils/niveles-grado';
 import { SceneComponent } from '../shared/scene/scene.component';
 import { PyroComponent } from '../shared/pyro/pyro.component';
 
+import { TraducirPipe } from '../i18n/i18n.pipes';
+import { SelectorIdiomaComponent } from '../i18n/selector-idioma.component';
 @Component({
   selector: 'app-seleccion-grado',
   standalone: true,
-  imports: [CommonModule, SceneComponent, PyroComponent],
+  imports: [CommonModule, SceneComponent, PyroComponent, TraducirPipe, SelectorIdiomaComponent],
   templateUrl: './seleccion-grado.component.html',
   styleUrls: ['./seleccion-grado.component.css']
 })
@@ -44,7 +46,7 @@ export class SeleccionGradoComponent {
 
     const { id } = obtenerSesion();
     if (!id) {
-      this.error = 'No encontramos tu sesión. Vuelve a iniciar sesión.';
+      this.error = 'grado.errorSesion';
       return;
     }
 
@@ -55,14 +57,6 @@ export class SeleccionGradoComponent {
       next: (resp) => {
         localStorage.setItem(`grado_${id}`, String(resp.grado));
         localStorage.setItem('grado', String(resp.grado));
-        // Al cambiar de grado el servidor reinicia el nivel. Hay que reflejarlo aquí: si se queda
-        // el nivel del grado anterior, el progreso del grado nuevo no se guarda al subir de nivel.
-        if (typeof resp.nivelActual === 'number' && resp.nivelActual >= 1) {
-          localStorage.setItem('nivelActual', String(resp.nivelActual));
-        }
-        if (typeof resp.nivelesCompletados === 'number') {
-          localStorage.setItem('nivelesCompletados', String(resp.nivelesCompletados));
-        }
         this.guardando = false;
 
         // Vuelve a la pantalla a la que el niño iba; si no hay, a la raíz.
@@ -72,7 +66,7 @@ export class SeleccionGradoComponent {
       },
       error: () => {
         this.guardando = false;
-        this.error = 'Ups, no pudimos guardar tu grado. Intenta de nuevo.';
+        this.error = 'grado.errorGuardar';
       }
     });
   }

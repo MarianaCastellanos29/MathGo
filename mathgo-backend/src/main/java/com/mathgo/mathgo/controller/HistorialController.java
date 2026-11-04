@@ -57,6 +57,10 @@ public class HistorialController {
         resultado.setPregunta(pregunta);
         resultado.setNivel(nivel);
         resultado.setCorrecto(correcto);
+        // El grado permite mostrar el tema del nivel en el historial
+        if (usuario.getGrado() != null) {
+            resultado.setGrado(usuario.getGrado());
+        }
         resultadoRepository.save(resultado);
 
         if (correcto) {

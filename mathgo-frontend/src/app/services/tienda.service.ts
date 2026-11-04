@@ -10,9 +10,19 @@ export interface ItemTienda {
   emoji: string;
 }
 
+/** Resultado de una compra. "clave" y "params" sirven para mostrar el mensaje en el idioma elegido. */
+export interface ResultadoCompra {
+  ok: boolean;
+  /** Mensaje en español (se conserva por compatibilidad). */
+  mensaje: string;
+  clave: string;
+  params: Record<string, string | number>;
+}
+
 @Injectable({ providedIn: 'root' })
 export class TiendaService {
 
+  /** nombre y descripcion están en español; la pantalla los traduce con AVATARES.<id>.NOMBRE y .DESCRIPCION. */
   readonly items: ItemTienda[] = [
     { id: 'adventurer',       nombre: 'Aventurero',    descripcion: 'El avatar clásico',          precio: 0,   estilo: 'adventurer',       emoji: '🧙' },
     { id: 'pixel-art',        nombre: 'Pixel Art',     descripcion: 'Estilo retro pixelado',      precio: 50,  estilo: 'pixel-art',        emoji: '🎮' },
@@ -34,18 +44,28 @@ export class TiendaService {
     return this.getItemsComprados().includes(itemId);
   }
 
-  comprar(item: ItemTienda): { ok: boolean; mensaje: string } {
+  comprar(item: ItemTienda): ResultadoCompra {
     if (this.estaComprado(item.id)) {
-      return { ok: false, mensaje: 'Ya tienes este avatar' };
+      return { ok: false, mensaje: 'Ya tienes este avatar', clave: 'TIENDA.YA_TIENES_AVATAR', params: {} };
     }
     const xp = this.auth.getXp();
     if (xp < item.precio) {
-      return { ok: false, mensaje: `Te faltan ${item.precio - xp} monedas` };
+      return {
+        ok: false,
+        mensaje: `Te faltan ${item.precio - xp} monedas`,
+        clave: 'TIENDA.FALTAN_MONEDAS',
+        params: { faltan: item.precio - xp }
+      };
     }
     const nuevaXp = xp - item.precio;
     const comprados = [...this.getItemsComprados(), item.id];
     this.auth.guardarProgreso({ xp: nuevaXp, itemsComprados: comprados.join(',') }).subscribe();
-    return { ok: true, mensaje: `¡${item.nombre} desbloqueado!` };
+    return {
+      ok: true,
+      mensaje: `¡${item.nombre} desbloqueado!`,
+      clave: 'TIENDA.AVATAR_DESBLOQUEADO',
+      params: { avatar: item.id }
+    };
   }
 
   getAvatarPreview(estilo: string, nombre: string): string {

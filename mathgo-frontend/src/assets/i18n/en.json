@@ -205,5 +205,95 @@
     "TERMINAR": "Finish",
     "GRADO_COMPLETADO": "You completed {{grado}}! You are amazing.",
     "ELEGIR_OTRO_GRADO": "Choose another grade"
+  },
+  "HISTORIAL": {
+    "TITULO": "My history",
+    "SUBTITULO": "All the exercises you have solved",
+    "CORRECTAS": "Correct",
+    "INCORRECTAS": "Incorrect",
+    "PRECISION": "Accuracy",
+    "PREGUNTA": "Question",
+    "NIVEL": "Level",
+    "RESULTADO": "Result",
+    "FECHA": "Date",
+    "CORRECTO": "Correct",
+    "INCORRECTO": "Incorrect",
+    "NIVEL_N": "Level {{n}}",
+    "VACIO": "You haven't answered any exercises yet.",
+    "IR_A_JUGAR": "Let's play!"
+  },
+  "PERFIL": {
+    "TITULO": "My avatar",
+    "SUBTITULO": "Choose the character that joins you on the adventure",
+    "MAS_AVATARES": "Get more avatars in the",
+    "VER_TIENDA": "See shop",
+    "GUARDADO": "Saved!",
+    "GUARDAR": "Save avatar"
+  },
+  "TIENDA": {
+    "SUBTITULO": "Spend your coins on lives and avatars",
+    "MONEDAS_N": "{{n}} coins",
+    "COMO_GANAR": "How to earn coins",
+    "PISTA_1": "Every correct answer in level 1 gives you 10 coins",
+    "PISTA_2": "In level 2 you earn 20 coins for each correct answer",
+    "PISTA_3": "Level 3 is the hardest, but it gives 30 coins per correct answer",
+    "PISTA_4": "Get many right in a row to collect coins faster",
+    "PISTA_5": "Each life costs {{precio}} coins — take care of your hearts!",
+    "PISTA_6": "The rarest avatars cost more, so save up and unlock them!",
+    "RESTABLECER": "Refill lives",
+    "VIDAS_DISPONIBLES": "{{n}}/{{max}} lives available",
+    "PRECIO": "Price:",
+    "POR_VIDA": "{{n}} coins per life",
+    "VIDAS_COMPLETAS": "Lives full",
+    "COMPRAR_VIDA": "Buy a life",
+    "SIN_MONEDAS": "Not enough coins",
+    "AVATARES": "Avatars",
+    "AVATARES_SUB": "Unlock new styles for your character",
+    "GRATIS": "Free",
+    "COMPRAR": "Buy",
+    "COMPRADO": "Owned",
+    "EN_USO": "In use",
+    "USAR": "Use",
+    "YA_TIENES_AVATAR": "You already have this avatar",
+    "FALTAN_MONEDAS": "You need {{faltan}} more coins",
+    "AVATAR_DESBLOQUEADO": "{{nombre}} unlocked!",
+    "USANDO": "Now using {{nombre}}!",
+    "TODAS_VIDAS": "You already have all your lives!",
+    "FALTAN_PARA_VIDA": "You need {{faltan}} more coins for a life",
+    "VIDA_RESTAURADA": "Life restored! You now have {{n}} lives"
+  },
+  "AVATARES": {
+    "adventurer": {
+      "NOMBRE": "Adventurer",
+      "DESCRIPCION": "The classic avatar"
+    },
+    "pixel-art": {
+      "NOMBRE": "Pixel Art",
+      "DESCRIPCION": "Retro pixelated style"
+    },
+    "bottts": {
+      "NOMBRE": "Robot",
+      "DESCRIPCION": "A cool robot"
+    },
+    "fun-emoji": {
+      "NOMBRE": "Fun Emoji",
+      "DESCRIPCION": "Fun and colorful"
+    },
+    "lorelei": {
+      "NOMBRE": "Lorelei",
+      "DESCRIPCION": "Elegant style"
+    },
+    "thumbs": {
+      "NOMBRE": "Thumbs",
+      "DESCRIPCION": "Cute and friendly"
+    },
+    "micah": {
+      "NOMBRE": "Micah",
+      "DESCRIPCION": "Minimalist art"
+    },
+    "avataaars": {
+      "NOMBRE": "Avataaars",
+      "DESCRIPCION": "The most popular"
+    }
   }
 }

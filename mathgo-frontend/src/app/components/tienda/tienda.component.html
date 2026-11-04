@@ -6,54 +6,54 @@
 
   <main class="mg-main">
     <div class="mg-title">
-      <h1>🏪 Tienda</h1>
-      <p>Gasta tus monedas en vidas y avatares · <span class="mg-pill saldo"><i class="mg-coin"></i>{{ xp }} monedas</span></p>
+      <h1>🏪 {{ 'NAV.TIENDA' | translate }}</h1>
+      <p>{{ 'TIENDA.SUBTITULO' | translate }} · <span class="mg-pill saldo"><i class="mg-coin"></i>{{ 'TIENDA.MONEDAS_N' | translate:{ n: (xp | number:'1.0-0':idiomaService.locale()) } }}</span></p>
     </div>
 
     <section class="seccion">
-      <h2>💡 ¿Cómo ganar monedas?</h2>
+      <h2>💡 {{ 'TIENDA.COMO_GANAR' | translate }}</h2>
       <div class="pistas">
         <div *ngFor="let pista of pistas" class="mg-card pista">
-          <span>{{ pista.emoji }}</span><p>{{ pista.texto }}</p>
+          <span>{{ pista.emoji }}</span><p>{{ pista.clave | translate:pista.params }}</p>
         </div>
       </div>
     </section>
 
     <section class="seccion">
-      <h2>Restablecer vidas</h2>
+      <h2>{{ 'TIENDA.RESTABLECER' | translate }}</h2>
       <div class="mg-card vidas">
         <div>
           <app-hearts class="corazones" [vidas]="vidas" [max]="MAX_VIDAS"></app-hearts>
-          <p>{{ vidas }}/{{ MAX_VIDAS }} vidas disponibles</p>
-          <small>Precio: <i class="mg-coin"></i> {{ PRECIO_VIDA }} monedas por vida</small>
+          <p>{{ 'TIENDA.VIDAS_DISPONIBLES' | translate:{ n: vidas, max: MAX_VIDAS } }}</p>
+          <small>{{ 'TIENDA.PRECIO' | translate }} <i class="mg-coin"></i> {{ 'TIENDA.POR_VIDA' | translate:{ n: PRECIO_VIDA } }}</small>
         </div>
         <button class="mg-btn" [class.ghost]="vidas >= MAX_VIDAS || xp < PRECIO_VIDA" (click)="comprarVida()">
-          <span *ngIf="vidas >= MAX_VIDAS">✅ Vidas completas</span>
-          <span *ngIf="vidas < MAX_VIDAS && xp >= PRECIO_VIDA">❤️ Comprar vida</span>
-          <span *ngIf="vidas < MAX_VIDAS && xp < PRECIO_VIDA">🔒 Sin monedas</span>
+          <span *ngIf="vidas >= MAX_VIDAS">✅ {{ 'TIENDA.VIDAS_COMPLETAS' | translate }}</span>
+          <span *ngIf="vidas < MAX_VIDAS && xp >= PRECIO_VIDA">❤️ {{ 'TIENDA.COMPRAR_VIDA' | translate }}</span>
+          <span *ngIf="vidas < MAX_VIDAS && xp < PRECIO_VIDA">🔒 {{ 'TIENDA.SIN_MONEDAS' | translate }}</span>
         </button>
       </div>
     </section>
 
     <section class="seccion">
-      <h2>🎨 Avatares</h2>
-      <p class="sub">Desbloquea nuevos estilos para tu personaje</p>
+      <h2>🎨 {{ 'TIENDA.AVATARES' | translate }}</h2>
+      <p class="sub">{{ 'TIENDA.AVATARES_SUB' | translate }}</p>
       <div class="items">
         <div *ngFor="let item of items" class="mg-card item"
              [class.comprado]="tienda.estaComprado(item.id)" [class.activo]="avatarActual === item.estilo">
-          <img [src]="getPreview(item.estilo)" [alt]="item.nombre" class="foto" />
-          <h3>{{ item.emoji }} {{ item.nombre }}</h3>
-          <p>{{ item.descripcion }}</p>
+          <img [src]="getPreview(item.estilo)" [alt]="('AVATARES.' + item.id + '.NOMBRE') | translate" class="foto" />
+          <h3>{{ item.emoji }} {{ ('AVATARES.' + item.id + '.NOMBRE') | translate }}</h3>
+          <p>{{ ('AVATARES.' + item.id + '.DESCRIPCION') | translate }}</p>
 
-          <div class="precio" *ngIf="!tienda.estaComprado(item.id)"><i class="mg-coin"></i>{{ item.precio === 0 ? 'Gratis' : item.precio + ' monedas' }}</div>
+          <div class="precio" *ngIf="!tienda.estaComprado(item.id)"><i class="mg-coin"></i>{{ item.precio === 0 ? ('TIENDA.GRATIS' | translate) : ('TIENDA.MONEDAS_N' | translate:{ n: item.precio }) }}</div>
 
           <button *ngIf="!tienda.estaComprado(item.id)" class="mg-btn" [class.ghost]="xp < item.precio" (click)="comprar(item)">
-            {{ xp >= item.precio ? '🛒 Comprar' : '🔒 Sin monedas' }}
+            {{ xp >= item.precio ? '🛒 ' + ('TIENDA.COMPRAR' | translate) : '🔒 ' + ('TIENDA.SIN_MONEDAS' | translate) }}
           </button>
           <div *ngIf="tienda.estaComprado(item.id)" class="comprado-fila">
-            <span class="mg-pill">✅ Comprado</span>
+            <span class="mg-pill">✅ {{ 'TIENDA.COMPRADO' | translate }}</span>
             <button class="mg-btn" [class.ghost]="avatarActual === item.estilo" (click)="usar(item)">
-              {{ avatarActual === item.estilo ? '✔ En uso' : 'Usar' }}
+              {{ avatarActual === item.estilo ? '✔ ' + ('TIENDA.EN_USO' | translate) : ('TIENDA.USAR' | translate) }}
             </button>
           </div>
         </div>

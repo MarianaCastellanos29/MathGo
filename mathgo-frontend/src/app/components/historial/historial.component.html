@@ -3,31 +3,31 @@
   <app-nav></app-nav>
   <main class="mg-main">
     <div class="mg-title">
-      <h1>📋 Mi historial</h1>
-      <p>Todos los ejercicios que has resuelto</p>
+      <h1>{{ 'hist.titulo' | t }}</h1>
+      <p>{{ 'hist.sub' | t }}</p>
     </div>
 
     <div class="mg-stats" *ngIf="historial.length > 0">
-      <div class="mg-card mg-stat"><span class="ico"><img class="mg-ico" src="assets/img/check.png" alt="" /></span><strong>{{ totalCorrectos }}</strong><span class="lbl">Correctas</span></div>
-      <div class="mg-card mg-stat pink"><span class="ico"><img class="mg-ico" src="assets/img/cross.png" alt="" /></span><strong>{{ totalIncorrectos }}</strong><span class="lbl">Incorrectas</span></div>
-      <div class="mg-card mg-stat sky"><span class="ico"><img class="mg-ico" src="assets/img/target.png" alt="" /></span><strong>{{ porcentaje }}%</strong><span class="lbl">Precisión</span></div>
+      <div class="mg-card mg-stat"><span class="ico"><img class="mg-ico" src="assets/img/check.png" alt="" /></span><strong>{{ totalCorrectos }}</strong><span class="lbl">{{ 'hist.correctas' | t }}</span></div>
+      <div class="mg-card mg-stat pink"><span class="ico"><img class="mg-ico" src="assets/img/cross.png" alt="" /></span><strong>{{ totalIncorrectos }}</strong><span class="lbl">{{ 'hist.incorrectas' | t }}</span></div>
+      <div class="mg-card mg-stat sky"><span class="ico"><img class="mg-ico" src="assets/img/target.png" alt="" /></span><strong>{{ porcentaje }}%</strong><span class="lbl">{{ 'hist.precision' | t }}</span></div>
     </div>
 
     <div class="mg-card tabla" *ngIf="historial.length > 0; else sinHistorial">
-      <div class="fila encabezado"><span>Pregunta</span><span>Nivel</span><span>Resultado</span><span>Fecha</span></div>
+      <div class="fila encabezado"><span>{{ 'hist.pregunta' | t }}</span><span>{{ 'hist.nivel' | t }}</span><span>{{ 'hist.resultado' | t }}</span><span>{{ 'hist.fecha' | t }}</span></div>
       <div class="fila" *ngFor="let item of historial" [class.correcto]="item.correcto" [class.incorrecto]="!item.correcto">
         <span class="preg">{{ item.pregunta }}</span>
-        <span><em class="chip">{{ nivelNombre(item.nivel) }}</em></span>
-        <span class="res">{{ item.correcto ? '✅ Correcto' : '❌ Incorrecto' }}</span>
-        <span class="fecha">{{ item.fechaRespuesta | date:'dd/MM/yy HH:mm' }}</span>
+        <span><em class="chip">{{ nivelNombre(item.nivel) | t }}</em></span>
+        <span class="res">{{ (item.correcto ? 'hist.ok' : 'hist.mal') | t }}</span>
+        <span class="fecha">{{ item.fechaRespuesta | fechaL:'short' }}</span>
       </div>
     </div>
 
     <ng-template #sinHistorial>
       <div class="mg-card mg-empty">
         <span class="big">📭</span>
-        <p>Aún no has respondido ningún ejercicio.</p>
-        <a routerLink="/home" class="mg-btn" style="margin-top:16px">¡Ir a jugar!</a>
+        <p>{{ 'hist.vacio' | t }}</p>
+        <a routerLink="/home" class="mg-btn" style="margin-top:16px">{{ 'hist.irJugar' | t }}</a>
       </div>
     </ng-template>
   </main>

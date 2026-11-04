@@ -12,6 +12,8 @@ Todos los cambios importantes del proyecto MathGo se documentan aquí.
 - `nginx.conf` para el frontend, de modo que las rutas de Angular funcionen al recargar la página.
 - Tests nuevos: `AccesoUsuarioTest`, `UsuarioSerializacionTest`, casos de rol en `JwtFilterTest` y casos de grados, niveles y XP en `EjercicioServiceTest`.
 - Documentación en `docs/SEGURIDAD.md`.
+- Internacionalización (i18n) y localización (l10n) en español e inglés: selector de idioma, diccionarios, pipes `t`, `fechaL` y `numeroL`. Documentación en `docs/I18N.md`.
+- Módulo de backup de MySQL: servicio `backup` en `docker-compose.yml` con respaldo automático diario, y scripts `respaldar-ahora.ps1` y `restaurar.ps1`. Documentación en `backup/README.md`.
 
 ### Cambiado
 - `JwtUtil`: el secreto y la expiración se leen de `JWT_SECRET` y `JWT_EXPIRATION`.

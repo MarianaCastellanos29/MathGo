@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { IdiomaService } from '../../services/idioma.service';
 import { TiendaService, ItemTienda } from '../../services/tienda.service';
 
 import { NavComponent } from '../../shared/nav/nav.component';
@@ -11,7 +13,7 @@ import { HeartsComponent } from '../../shared/hearts/hearts.component';
 @Component({
   selector: 'app-tienda',
   standalone: true,
-  imports: [CommonModule, NavComponent, HeartsComponent, SceneComponent],
+  imports: [CommonModule, TranslateModule, NavComponent, HeartsComponent, SceneComponent],
   templateUrl: './tienda.component.html',
   styleUrls: ['./tienda.component.scss']
 })
@@ -25,22 +27,26 @@ export class TiendaComponent implements OnInit {
   mensajeOk: boolean = false;
   mostrarMensaje: boolean = false;
 
+  readonly idiomaService = inject(IdiomaService);
+
   readonly PRECIO_VIDA = 50;
   readonly MAX_VIDAS = 5;
 
-  pistas = [
-    { emoji: '➕', texto: 'Responde sumas correctamente y gana 10 monedas cada una' },
-    { emoji: '➖', texto: 'En el nivel 2 de restas ganas 15 monedas por respuesta' },
-    { emoji: '✖️', texto: 'El nivel 3 es el más difícil pero da 20 monedas por acierto' },
-    { emoji: '🔥', texto: 'Completa todos los ejercicios sin fallar para juntar más rápido' },
-    { emoji: '🪙', texto: 'Cada vida cuesta 50 monedas — ¡cuida tus corazones!' },
-    { emoji: '⭐', texto: 'Los avatares más raros cuestan más, ¡ahorra y desbloquéalos!' },
+  /** Consejos para ganar monedas. Se ganan nivel × 10 monedas por respuesta correcta. */
+  pistas: { emoji: string; clave: string; params: Record<string, number> }[] = [
+    { emoji: '➕', clave: 'TIENDA.PISTA_1', params: {} },
+    { emoji: '➖', clave: 'TIENDA.PISTA_2', params: {} },
+    { emoji: '✖️', clave: 'TIENDA.PISTA_3', params: {} },
+    { emoji: '🔥', clave: 'TIENDA.PISTA_4', params: {} },
+    { emoji: '🪙', clave: 'TIENDA.PISTA_5', params: { precio: this.PRECIO_VIDA } },
+    { emoji: '⭐', clave: 'TIENDA.PISTA_6', params: {} },
   ];
 
   constructor(
     private auth: AuthService,
     public tienda: TiendaService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -54,37 +60,39 @@ export class TiendaComponent implements OnInit {
   comprar(item: ItemTienda): void {
     const resultado = this.tienda.comprar(item);
     this.xp = this.auth.getXp();
-    this.mensaje = resultado.mensaje;
-    this.mensajeOk = resultado.ok;
-    this.mostrarToast();
+    this.avisar(resultado.clave, resultado.params, resultado.ok);
   }
 
   usar(item: ItemTienda): void {
     this.auth.setAvatarActivo(item.estilo);
     this.avatarActual = item.estilo;
-    this.mensaje = `¡Usando ${item.nombre}!`;
-    this.mensajeOk = true;
-    this.mostrarToast();
+    this.avisar('TIENDA.USANDO', { avatar: item.id }, true);
   }
 
   comprarVida(): void {
     if (this.vidas >= this.MAX_VIDAS) {
-      this.mensaje = '¡Ya tienes todas las vidas!';
-      this.mensajeOk = false;
-      this.mostrarToast();
+      this.avisar('TIENDA.TODAS_VIDAS', {}, false);
       return;
     }
     if (this.xp < this.PRECIO_VIDA) {
-      this.mensaje = `Te faltan ${this.PRECIO_VIDA - this.xp} monedas para una vida`;
-      this.mensajeOk = false;
-      this.mostrarToast();
+      this.avisar('TIENDA.FALTAN_PARA_VIDA', { faltan: this.PRECIO_VIDA - this.xp }, false);
       return;
     }
     this.auth.guardarProgreso({ xp: this.xp - this.PRECIO_VIDA, vidas: this.vidas + 1 }).subscribe();
     this.xp = this.auth.getXp();
     this.vidas = this.auth.getVidas();
-    this.mensaje = `❤️ ¡Vida restaurada! Te quedan ${this.vidas} vidas`;
-    this.mensajeOk = true;
+    this.avisar('TIENDA.VIDA_RESTAURADA', { n: this.vidas }, true);
+  }
+
+  /** Muestra un aviso traducido al idioma elegido. Si trae "avatar", añade su nombre traducido. */
+  private avisar(clave: string, params: Record<string, string | number>, ok: boolean): void {
+    const parametros: Record<string, string | number> = { ...params };
+    const avatar = parametros['avatar'];
+    if (typeof avatar === 'string') {
+      parametros['nombre'] = this.translate.instant(`AVATARES.${avatar}.NOMBRE`);
+    }
+    this.mensaje = this.translate.instant(clave, parametros);
+    this.mensajeOk = ok;
     this.mostrarToast();
   }
 

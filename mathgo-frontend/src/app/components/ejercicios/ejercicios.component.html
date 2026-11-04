@@ -4,26 +4,21 @@
   <!-- Cargando -->
   <div *ngIf="ejercicios.length === 0 && !finNivel && !sinVidas" class="fin-screen">
     <app-pyro class="fin-pyro" mood="idle"></app-pyro>
-    <h2>{{ 'EJERCICIOS.PREPARANDO' | translate }}</h2>
+    <h2>{{ 'ej.preparando' | t }}</h2>
   </div>
 
   <!-- Sin vidas -->
   <div *ngIf="sinVidas" class="fin-screen">
     <app-pyro class="fin-pyro" mood="sad"></app-pyro>
-    <h2>{{ 'EJERCICIOS.SIN_VIDAS' | translate }}</h2>
-    <p>{{ 'EJERCICIOS.SIN_VIDAS_TEXTO' | translate }} ❤️</p>
+    <h2>{{ 'ej.sinVidas' | t }}</h2>
+    <p>{{ 'ej.sinVidasTxt' | t }}</p>
     <div class="fin-botones">
-      <button class="mg-btn" (click)="irHome()">🏠 {{ 'EJERCICIOS.INICIO' | translate }}</button>
+      <button class="mg-btn" (click)="irHome()">{{ 'ej.inicio' | t }}</button>
     </div>
   </div>
 
   <!-- Nivel completado -->
   <div *ngIf="finNivel && !sinVidas" class="fin-screen">
-    <div class="confeti" *ngIf="estrellas >= 2 || gradoCompletado" aria-hidden="true">
-      <i *ngFor="let c of confeti" [style.left.%]="c.x" [style.background]="c.color"
-         [style.animation-delay]="c.delay" [style.--d]="c.dur"></i>
-    </div>
-
     <app-pyro class="fin-pyro" mood="happy"></app-pyro>
 
     <div class="estrellas-fin">
@@ -32,110 +27,87 @@
       <img src="assets/img/star.png" alt="" [class.on]="estrellas >= 3" />
     </div>
 
-    <h2>{{ 'EJERCICIOS.COMPLETADO' | translate:{ nombre: (claveTema | translate) } }}</h2>
+    <h2>{{ 'ej.completado' | t:{ tema: (nombreNivel | t) } }}</h2>
     <p class="mensaje" *ngIf="mensajePyroFinal">{{ mensajePyroFinal }}</p>
-    <p class="mensaje" *ngIf="!mensajePyroFinal">🔥 {{ 'EJERCICIOS.ORGULLOSO' | translate }}</p>
-    <p class="mensaje" *ngIf="gradoCompletado">🏆 {{ 'EJERCICIOS.GRADO_COMPLETADO' | translate:{ grado: (claveGradoEnFrase | translate) } }}</p>
+    <p class="mensaje" *ngIf="!mensajePyroFinal">{{ 'ej.orgulloso' | t }}</p>
 
     <div class="resumen">
-      <div class="mg-card"><img class="mini" src="assets/img/check.png" alt="" /><strong>{{ puntaje }}/{{ ejercicios.length }}</strong><small>{{ 'EJERCICIOS.CORRECTAS' | translate }}</small></div>
-      <div class="mg-card"><i class="mg-coin"></i><strong>+{{ monedasGanadas }}</strong><small>{{ 'EJERCICIOS.MONEDAS' | translate }}</small></div>
-      <div class="mg-card"><span class="emoji-resumen">🔥</span><strong>{{ mejorRachaNivel }}</strong><small>{{ 'EJERCICIOS.RACHA' | translate }}</small></div>
-      <div class="mg-card"><app-hearts [vidas]="1" [max]="1"></app-hearts><strong>{{ vidas }}/5</strong><small>{{ 'EJERCICIOS.VIDAS' | translate }}</small></div>
+      <div class="mg-card"><img class="mini" src="assets/img/check.png" alt="" /><strong>{{ puntaje }}/{{ ejercicios.length }}</strong><small>{{ 'ej.correctas' | t }}</small></div>
+      <div class="mg-card"><i class="mg-coin"></i><strong>+{{ monedasGanadas }}</strong><small>{{ 'ej.monedas' | t }}</small></div>
+      <div class="mg-card"><app-hearts [vidas]="1" [max]="1"></app-hearts><strong>{{ vidas }}/5</strong><small>{{ 'ej.vidas' | t }}</small></div>
     </div>
 
     <div class="mg-card datos" *ngIf="datosCuriososNivel.length > 0">
-      <h3>💡 {{ 'EJERCICIOS.SABIAS_QUE' | translate }}</h3>
+      <h3>{{ 'ej.sabias' | t }}</h3>
       <p *ngFor="let dato of datosCuriososNivel">{{ dato }}</p>
     </div>
 
     <div class="fin-botones">
-      <button class="mg-btn" *ngIf="gradoCompletado" [disabled]="guardandoNivel" (click)="elegirOtroGrado()">🎒 {{ 'EJERCICIOS.ELEGIR_OTRO_GRADO' | translate }}</button>
-      <button class="mg-btn" *ngIf="hayNivelSiguiente" [disabled]="guardandoNivel" (click)="irSiguienteNivel()">⚡ {{ 'EJERCICIOS.SIGUIENTE_NIVEL' | translate }}</button>
-      <button class="mg-btn ghost" [disabled]="guardandoNivel" (click)="irHome()">🏠 {{ 'EJERCICIOS.VOLVER_INICIO' | translate }}</button>
+      <button class="mg-btn" *ngIf="hayNivelSiguiente" (click)="irSiguienteNivel()">{{ 'ej.siguienteNivel' | t }}</button>
+      <button class="mg-btn ghost" (click)="irHome()">{{ 'ej.volver' | t }}</button>
     </div>
   </div>
 
   <!-- Juego activo -->
   <ng-container *ngIf="!finNivel && !sinVidas && ejercicios.length > 0">
     <div class="barra-juego">
-      <button class="cerrar" (click)="irHome()" [attr.aria-label]="'EJERCICIOS.SALIR' | translate">✕</button>
-
-      <div class="segmentos" role="progressbar" [attr.aria-valuenow]="progreso" aria-valuemin="0" aria-valuemax="100">
-        <i *ngFor="let r of resultados; let i = index" class="seg"
-           [class.ok]="r === true" [class.mal]="r === false" [class.actual]="r === null && i === indiceActual"></i>
+      <button class="cerrar" (click)="irHome()" [attr.aria-label]="'ej.salir' | t">✕</button>
+      <div class="mg-bar" role="progressbar" [attr.aria-valuenow]="progreso" aria-valuemin="0" aria-valuemax="100">
+        <i [style.width.%]="progreso"></i>
       </div>
-
-      <span class="racha" *ngIf="racha > 0">🔥 {{ racha }}</span>
-      <button class="sonido" (click)="alternarSonido()"
-              [attr.aria-label]="(sonidoActivo ? 'EJERCICIOS.SILENCIAR' : 'EJERCICIOS.ACTIVAR_SONIDO') | translate">{{ sonidoActivo ? '🔊' : '🔇' }}</button>
-      <app-hearts class="barra-vidas" [class.golpe]="esCorrecta === false" [vidas]="vidas"></app-hearts>
+      <app-hearts class="barra-vidas" [vidas]="vidas"></app-hearts>
     </div>
 
-    <div class="cuerpo" [class.con-hoja]="!!respuestaSeleccionada">
-      <div class="fila-tag">
-        <div class="nivel-tag">{{ 'EJERCICIOS.NIVEL_TAG' | translate:{ nivel: nivel, tema: (claveTema | translate), actual: indiceActual + 1, total: ejercicios.length } }}</div>
-        <button class="pista" [disabled]="!pistaDisponible" (click)="usarPista()">💡 {{ 'EJERCICIOS.PISTA' | translate }} · {{ pistasRestantes }}</button>
+    <div class="cuerpo">
+      <div class="nivel-tag">{{ 'ej.etiqueta' | t:{ nivel: nivel, tema: (nombreNivel | t), actual: indiceActual + 1, total: ejercicios.length } }}</div>
+
+      <div class="pregunta-fila">
+        <div class="pyro-lateral" [class.acierto]="esCorrecta === true" [class.fallo]="esCorrecta === false">
+          <div class="burbuja" *ngIf="!respuestaSeleccionada">{{ 'ej.tuPuedes' | t }}</div>
+          <div class="burbuja" *ngIf="esCorrecta === true">{{ 'ej.fuego' | t }}</div>
+          <div class="burbuja" *ngIf="esCorrecta === false">{{ 'ej.animo' | t }}</div>
+          <app-pyro [mood]="esCorrecta === false ? 'sad' : 'happy'"></app-pyro>
+        </div>
+
+        <h2 class="pregunta">
+          <ng-container *ngFor="let p of preguntaPartes"><span [class.num]="p.n">{{ p.t }}</span></ng-container>
+        </h2>
       </div>
 
-      <div class="escena" *ngFor="let k of [indiceActual]">
-        <div class="pregunta-fila" [class.vertical]="preguntaLarga">
-          <div class="pyro-lateral" [class.acierto]="esCorrecta === true" [class.fallo]="esCorrecta === false">
-            <div class="burbuja" *ngIf="!respuestaSeleccionada">{{ 'EJERCICIOS.TU_PUEDES' | translate }}</div>
-            <div class="burbuja" *ngIf="esCorrecta === true">{{ 'EJERCICIOS.FUEGO' | translate }} 🔥</div>
-            <div class="burbuja" *ngIf="esCorrecta === false">{{ 'EJERCICIOS.ANIMO' | translate }} 💪</div>
-            <app-pyro [mood]="esCorrecta === false ? 'sad' : 'happy'"></app-pyro>
-          </div>
-
-          <div class="pregunta-col">
-            <h2 class="pregunta" [class.larga]="preguntaLarga">
-              <ng-container *ngFor="let p of preguntaPartes"><span [class.num]="p.n">{{ p.t }}</span></ng-container>
-            </h2>
-            <app-visual-ejercicio [pregunta]="ejercicioActual.pregunta"></app-visual-ejercicio>
-          </div>
-        </div>
-
-        <div class="explosion" *ngIf="mostrarExplosion">
-          <span *ngFor="let e of explosionItems" class="explosion-item"
-                [style]="{'--transform': e.transform, 'animation-delay': e.delay}">⭐</span>
-        </div>
-
-        <div class="opciones">
-          <button *ngFor="let op of ejercicioActual.opciones; let i = index"
-                  class="opcion"
-                  [attr.data-i]="i"
-                  [class.seleccionada]="respuestaSeleccionada === op"
-                  [class.correcta]="respuestaSeleccionada && op === ejercicioActual.respuestaCorrecta"
-                  [class.incorrecta]="respuestaSeleccionada === op && !esCorrecta"
-                  [class.quitada]="opcionesQuitadas.includes(op)"
-                  [disabled]="!!respuestaSeleccionada || opcionesQuitadas.includes(op)"
-                  (click)="seleccionar(op)">
-            <span class="letra">{{ letras[i] }}</span>
-            <span class="valor">{{ op }}</span>
-            <span class="marca-op" *ngIf="respuestaSeleccionada && op === ejercicioActual.respuestaCorrecta">✓</span>
-            <span class="marca-op" *ngIf="respuestaSeleccionada === op && !esCorrecta">✗</span>
-          </button>
-        </div>
+      <div class="explosion" *ngIf="mostrarExplosion">
+        <span *ngFor="let e of explosionItems" class="explosion-item"
+              [style]="{'--transform': e.transform, 'animation-delay': e.delay}">⭐</span>
       </div>
-    </div>
 
-    <!-- Feedback -->
-    <div *ngIf="respuestaSeleccionada" class="hoja" [class.ok]="esCorrecta" [class.mal]="!esCorrecta" aria-live="polite">
-      <div class="hoja-in">
-        <div class="hoja-texto">
-          <div class="veredicto">
-            <img class="marca" [src]="esCorrecta ? 'assets/img/check.png' : 'assets/img/cross.png'" alt="" />
-            <strong>{{ (esCorrecta ? 'EJERCICIOS.CORRECTO' : 'EJERCICIOS.INCORRECTO') | translate }}</strong>
-            <ng-container *ngIf="esCorrecta"><b class="premio">+{{ nivel * 10 }}</b><i class="mg-coin"></i></ng-container>
-          </div>
+      <div class="opciones">
+        <button *ngFor="let op of ejercicioActual.opciones"
+                class="opcion"
+                [class.seleccionada]="respuestaSeleccionada === op"
+                [class.correcta]="respuestaSeleccionada && op === ejercicioActual.respuestaCorrecta"
+                [class.incorrecta]="respuestaSeleccionada === op && !esCorrecta"
+                [disabled]="!!respuestaSeleccionada"
+                (click)="seleccionar(op)">
+          {{ op }}
+        </button>
+      </div>
 
-          <p class="nota" *ngIf="ejercicioActual.explicacion">{{ ejercicioActual.explicacion }}</p>
-          <p class="nota" *ngIf="!ejercicioActual.explicacion && !esCorrecta && explicacionError">{{ explicacionError }}</p>
-          <p class="nota" *ngIf="esCorrecta && datoCurioso">💡 {{ datoCurioso }}</p>
+      <!-- Feedback -->
+      <div *ngIf="respuestaSeleccionada" class="feedback mg-card"
+           [class.correcto]="esCorrecta" [class.incorrecto]="!esCorrecta" aria-live="polite">
+        <div class="veredicto">
+          <img class="marca" [src]="esCorrecta ? 'assets/img/check.png' : 'assets/img/cross.png'" alt="" />
+          <strong>{{ (esCorrecta ? 'ej.correcto' : 'ej.incorrecto') | t }}</strong>
+          <ng-container *ngIf="esCorrecta"><b class="premio">+{{ nivel * 10 }}</b><i class="mg-coin"></i></ng-container>
         </div>
+
+        <p *ngIf="esCorrecta && cargandoDato" class="nota">{{ 'ej.buscando' | t }}</p>
+        <p *ngIf="esCorrecta && datoCurioso && !cargandoDato" class="nota">💡 {{ datoCurioso }}</p>
+
+        <p *ngIf="!esCorrecta && cargandoExplicacion" class="nota">{{ 'ej.pensando' | t }}</p>
+        <p *ngIf="!esCorrecta && explicacionError && !cargandoExplicacion" class="nota">{{ explicacionError }}</p>
 
         <button class="mg-btn" [disabled]="cargandoDato || cargandoExplicacion" (click)="siguiente()">
-          {{ (ultimaPregunta ? 'EJERCICIOS.TERMINAR' : 'EJERCICIOS.SIGUIENTE') | translate }} {{ ultimaPregunta ? '🏁' : '→' }}
+          {{ (cargandoDato || cargandoExplicacion ? 'ej.espera' : indiceActual + 1 >= ejercicios.length ? 'ej.terminar' : 'ej.siguiente') | t }}
         </button>
       </div>
     </div>

@@ -26,23 +26,41 @@ export type VisualEjercicio =
     }
   | { tipo: 'porcentaje'; porcentaje: number; total: number };
 
-const RE_ARITMETICA = /^¿Cuánto es (\d+) ([+\-×÷]) (\d+)\?$/;
-const RE_FRACCION_OP = /^¿Cuánto es (\d+)\/(\d+) ([+\-]) (\d+)\/(\d+)\?$/;
-const RE_FRACCION_COMPARAR = /^¿Cuál fracción es (?:mayor|menor): (\d+)\/(\d+) o (\d+)\/(\d+)\?$/;
-const RE_FRACCION_IGUAL = /^¿Qué fracción es igual a (\d+)\/(\d+)\?$/;
-const RE_PORCENTAJE = /^¿Cuánto es el (\d+)% de (\d+)\?$/;
-const RE_CUADRADO = /^Un cuadrado tiene lados de (\d+) (cm|m)\. ¿Cuál es su (perímetro|área)\?$/;
-const RE_RECTANGULO =
-  /^Un (?:rectángulo|jardín rectangular) mide (\d+) (cm|m) de largo y (\d+) (?:cm|m) de ancho\. ¿Cuál es su (perímetro|área)\?$/;
-const RE_TRIANGULO =
-  /^Un triángulo tiene base de (\d+) (cm|m) y altura de (\d+) (?:cm|m)\. ¿Cuál es su (perímetro|área)\?$/;
+// Las preguntas pueden llegar en español o en inglés (según el idioma elegido).
+const RE_ARITMETICA = /^(?:¿Cuánto es|What is) (\d+) ([+\-×÷]) (\d+)\?$/;
+const RE_FRACCION_OP = /^(?:¿Cuánto es|What is) (\d+)\/(\d+) ([+\-]) (\d+)\/(\d+)\?$/;
+const RE_FRACCION_COMPARAR =
+  /^(?:¿Cuál fracción es (?:mayor|menor)|Which fraction is (?:greater|smaller)): (\d+)\/(\d+) (?:o|or) (\d+)\/(\d+)\?$/;
+const RE_FRACCION_IGUAL = /^(?:¿Qué fracción es igual a|Which fraction is equal to) (\d+)\/(\d+)\?$/;
+const RE_PORCENTAJE = /^(?:¿Cuánto es el|What is) (\d+)% (?:de|of) (\d+)\?$/;
+const RE_CUADRADO = [
+  /^Un cuadrado tiene lados de (\d+) (cm|m)\. ¿Cuál es su (perímetro|área)\?$/,
+  /^A square has sides of (\d+) (cm|m)\. What is its (perimeter|area)\?$/
+];
+const RE_RECTANGULO = [
+  /^Un (?:rectángulo|jardín rectangular) mide (\d+) (cm|m) de largo y (\d+) (?:cm|m) de ancho\. ¿Cuál es su (perímetro|área)\?$/,
+  /^A (?:rectangle|rectangular garden) is (\d+) (cm|m) long and (\d+) (?:cm|m) wide\. What is its (perimeter|area)\?$/
+];
+const RE_TRIANGULO = [
+  /^Un triángulo tiene base de (\d+) (cm|m) y altura de (\d+) (?:cm|m)\. ¿Cuál es su (perímetro|área)\?$/,
+  /^A triangle has a base of (\d+) (cm|m) and a height of (\d+) (?:cm|m)\. What is its (perimeter|area)\?$/
+];
+
+/** Primera coincidencia entre varias expresiones que comparten el orden de sus grupos. */
+function primera(texto: string, expresiones: RegExp[]): RegExpExecArray | null {
+  for (const re of expresiones) {
+    const m = re.exec(texto);
+    if (m) return m;
+  }
+  return null;
+}
 
 function fraccionValida(f: Fraccion): boolean {
   return f.d >= 2 && f.d <= 12 && f.n >= 0 && f.n <= f.d;
 }
 
 function medidaDe(texto: string): 'perimetro' | 'area' {
-  return texto === 'área' ? 'area' : 'perimetro';
+  return texto === 'área' || texto === 'area' ? 'area' : 'perimetro';
 }
 
 export function visualDePregunta(pregunta: string | null | undefined): VisualEjercicio | null {
@@ -107,13 +125,13 @@ export function visualDePregunta(pregunta: string | null | undefined): VisualEje
     return null;
   }
 
-  const cuad = RE_CUADRADO.exec(p);
+  const cuad = primera(p, RE_CUADRADO);
   if (cuad) {
     const lado = Number(cuad[1]);
     return { tipo: 'figura', figura: 'cuadrado', medida: medidaDe(cuad[3]), largo: lado, ancho: lado, unidad: cuad[2] };
   }
 
-  const rect = RE_RECTANGULO.exec(p);
+  const rect = primera(p, RE_RECTANGULO);
   if (rect) {
     return {
       tipo: 'figura', figura: 'rectangulo', medida: medidaDe(rect[4]),
@@ -121,8 +139,8 @@ export function visualDePregunta(pregunta: string | null | undefined): VisualEje
     };
   }
 
-  const tri = RE_TRIANGULO.exec(p);
-  if (tri && tri[4] === 'área') {
+  const tri = primera(p, RE_TRIANGULO);
+  if (tri && medidaDe(tri[4]) === 'area') {
     return {
       tipo: 'figura', figura: 'triangulo', medida: 'area',
       largo: Number(tri[1]), ancho: Number(tri[3]), unidad: tri[2]

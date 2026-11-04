@@ -2,13 +2,14 @@
   <app-scene></app-scene>
 
   <main class="mg-main contenedor">
+    <app-selector-idioma class="esquina"></app-selector-idioma>
     <div class="saludo">
       <app-pyro class="pyro" [mood]="seleccionado ? 'happy' : 'idle'"></app-pyro>
-      <div class="burbuja">{{ seleccionado ? '¡Buena elección! 🎉' : '¡Hola! 👋' }}</div>
+      <div class="burbuja">{{ (seleccionado ? 'grado.bien' : 'grado.hola') | t }}</div>
     </div>
 
-    <h1>¿En qué grado estás?</h1>
-    <p class="sub">Elige tu grado y Pyro te prepara los niveles justo para ti</p>
+    <h1>{{ 'grado.titulo' | t }}</h1>
+    <p class="sub">{{ 'grado.sub' | t }}</p>
 
     <div class="grados">
       <button
@@ -22,25 +23,25 @@
         <span class="check" *ngIf="seleccionado === g.valor">✓</span>
         <span class="emoji">{{ g.emoji }}</span>
         <span class="numero">{{ g.valor }}°</span>
-        <span class="nombre">{{ g.nombre }}</span>
+        <span class="nombre">{{ ('grado.nombre.' + g.valor) | t }}</span>
       </button>
     </div>
 
     <div class="vista-previa" *ngIf="seleccionado">
-      <span class="etiqueta">En este grado vas a practicar</span>
+      <span class="etiqueta">{{ 'grado.practicaras' | t }}</span>
       <div class="temas">
-        <span class="tema" *ngFor="let t of temas">{{ t }}</span>
+        <span class="tema" *ngFor="let tema of temas">{{ tema | t }}</span>
       </div>
     </div>
 
-    <p class="error" *ngIf="error">⚠️ {{ error }}</p>
+    <p class="error" *ngIf="error">⚠️ {{ error | t }}</p>
 
     <button
       type="button"
       class="mg-btn btn-continuar"
       [disabled]="seleccionado === null || guardando"
       (click)="continuar()">
-      {{ guardando ? 'Guardando...' : '▶ ¡Vamos a jugar!' }}
+      {{ (guardando ? 'grado.guardando' : 'grado.vamos') | t }}
     </button>
   </main>
 </div>

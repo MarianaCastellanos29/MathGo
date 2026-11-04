@@ -3,28 +3,28 @@
   <app-nav></app-nav>
   <main class="mg-main">
     <div class="mg-title">
-      <h1>📊 Mi progreso</h1>
-      <p>Tu historial de ejercicios y precisión</p>
+      <h1>{{ 'prog.titulo' | t }}</h1>
+      <p>{{ 'prog.sub' | t }}</p>
     </div>
 
     <ng-container *ngIf="progreso; else cargandoP">
       <div class="mg-stats">
-        <div class="mg-card mg-stat sky"><span class="ico"><img class="mg-ico" src="assets/img/bars.png" alt="" /></span><strong>{{ progreso.total }}</strong><span class="lbl">Ejercicios resueltos</span></div>
-        <div class="mg-card mg-stat"><span class="ico"><img class="mg-ico" src="assets/img/check.png" alt="" /></span><strong>{{ progreso.correctos }}</strong><span class="lbl">Respuestas correctas</span></div>
-        <div class="mg-card mg-stat pink"><span class="ico"><img class="mg-ico" src="assets/img/target.png" alt="" /></span><strong>{{ progreso.porcentaje }}%</strong><span class="lbl">Porcentaje de aciertos</span></div>
-        <div class="mg-card mg-stat gold"><span class="ico"><img class="mg-ico" src="assets/img/star.png" alt="" /></span><strong>{{ nivelActual }}</strong><span class="lbl">Nivel actual</span></div>
+        <div class="mg-card mg-stat sky"><span class="ico"><img class="mg-ico" src="assets/img/bars.png" alt="" /></span><strong>{{ progreso.total }}</strong><span class="lbl">{{ 'prog.resueltos' | t }}</span></div>
+        <div class="mg-card mg-stat"><span class="ico"><img class="mg-ico" src="assets/img/check.png" alt="" /></span><strong>{{ progreso.correctos }}</strong><span class="lbl">{{ 'prog.correctas' | t }}</span></div>
+        <div class="mg-card mg-stat pink"><span class="ico"><img class="mg-ico" src="assets/img/target.png" alt="" /></span><strong>{{ progreso.porcentaje }}%</strong><span class="lbl">{{ 'prog.aciertos' | t }}</span></div>
+        <div class="mg-card mg-stat gold"><span class="ico"><img class="mg-ico" src="assets/img/star.png" alt="" /></span><strong>{{ nivelActual }}</strong><span class="lbl">{{ 'prog.nivel' | t }}</span></div>
       </div>
 
       <div class="mg-card precision">
-        <h2>Precisión general</h2>
+        <h2>{{ 'prog.precision' | t }}</h2>
         <div class="mg-bar"><i [style.width.%]="progreso.porcentaje"
              [class.baja]="progreso.porcentaje < 50"
              [class.media]="progreso.porcentaje >= 50 && progreso.porcentaje < 80"></i></div>
         <span class="pct">{{ progreso.porcentaje }}%</span>
       </div>
 
-      <div class="mas"><a routerLink="/historial" class="mg-btn ghost">📋 Ver mi historial</a></div>
+      <div class="mas"><a routerLink="/historial" class="mg-btn ghost">{{ 'prog.verHistorial' | t }}</a></div>
     </ng-container>
-    <ng-template #cargandoP><div class="mg-loading">⏳ Cargando tu progreso...</div></ng-template>
+    <ng-template #cargandoP><div class="mg-loading">{{ 'prog.cargando' | t }}</div></ng-template>
   </main>
 </div>

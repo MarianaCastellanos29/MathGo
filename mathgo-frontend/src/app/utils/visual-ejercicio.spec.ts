@@ -67,6 +67,40 @@ describe('visualDePregunta', () => {
     });
   });
 
+  it('preguntas en inglés: mismas ayudas visuales', () => {
+    expect(visualDePregunta('What is 3 + 2?')).toEqual({ tipo: 'puntos', a: 3, b: 2, op: '+' });
+    expect(visualDePregunta('What is 23 + 14?')).toEqual({ tipo: 'bloques', a: 23, b: 14, op: '+' });
+    expect(visualDePregunta('What is 4 × 5?')).toEqual({ tipo: 'matriz', filas: 4, columnas: 5 });
+    expect(visualDePregunta('What is 12 × 12?')).toEqual({ tipo: 'area', a: 12, b: 12 });
+    expect(visualDePregunta('What is 25% of 80?')).toEqual({ tipo: 'porcentaje', porcentaje: 25, total: 80 });
+    expect(visualDePregunta('What is 1/4 + 2/4?')).toEqual({
+      tipo: 'fracciones', fracciones: [{ n: 1, d: 4 }, { n: 2, d: 4 }], relacion: '+'
+    });
+    expect(visualDePregunta('Which fraction is smaller: 2/3 or 1/3?')).toEqual({
+      tipo: 'fracciones', fracciones: [{ n: 2, d: 3 }, { n: 1, d: 3 }], relacion: 'comparar'
+    });
+    expect(visualDePregunta('Which fraction is equal to 1/2?')).toEqual({
+      tipo: 'fracciones', fracciones: [{ n: 1, d: 2 }], relacion: 'igual'
+    });
+  });
+
+  it('geometría en inglés', () => {
+    expect(visualDePregunta('A square has sides of 5 cm. What is its perimeter?')).toEqual({
+      tipo: 'figura', figura: 'cuadrado', medida: 'perimetro', largo: 5, ancho: 5, unidad: 'cm'
+    });
+    expect(visualDePregunta('A rectangular garden is 15 m long and 6 m wide. What is its area?')).toEqual({
+      tipo: 'figura', figura: 'rectangulo', medida: 'area', largo: 15, ancho: 6, unidad: 'm'
+    });
+    expect(visualDePregunta('A triangle has a base of 8 cm and a height of 5 cm. What is its area?')).toEqual({
+      tipo: 'figura', figura: 'triangulo', medida: 'area', largo: 8, ancho: 5, unidad: 'cm'
+    });
+  });
+
+  it('decimales y problemas con historia en inglés: null', () => {
+    expect(visualDePregunta('What is 1.5 + 2.3?')).toBeNull();
+    expect(visualDePregunta('Sofía has 24 stickers and gives away 9. How many stickers does she have left?')).toBeNull();
+  });
+
   it('problemas con historia y entradas vacías: null', () => {
     expect(visualDePregunta('Sofía tiene 24 stickers y regala 9. ¿Cuántos stickers le quedan?')).toBeNull();
     expect(visualDePregunta('')).toBeNull();

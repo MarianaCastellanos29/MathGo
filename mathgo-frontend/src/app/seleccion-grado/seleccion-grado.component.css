@@ -47,3 +47,5 @@ h1 { font: 800 clamp(2rem, 5vw, 3rem)/1.1 var(--mg-display); }
 @keyframes pop { from { transform: scale(0); } 70% { transform: scale(1.2); } to { transform: scale(1); } }
 
 @media (max-width: 560px) { .burbuja { display: none; } .pyro { width: 120px; } }
+
+.esquina { position: absolute; top: 18px; right: 22px; z-index: 5; }

@@ -205,5 +205,95 @@
     "TERMINAR": "Terminar",
     "GRADO_COMPLETADO": "¡Completaste {{grado}}! Eres increíble.",
     "ELEGIR_OTRO_GRADO": "Elegir otro grado"
+  },
+  "HISTORIAL": {
+    "TITULO": "Mi historial",
+    "SUBTITULO": "Todos los ejercicios que has resuelto",
+    "CORRECTAS": "Correctas",
+    "INCORRECTAS": "Incorrectas",
+    "PRECISION": "Precisión",
+    "PREGUNTA": "Pregunta",
+    "NIVEL": "Nivel",
+    "RESULTADO": "Resultado",
+    "FECHA": "Fecha",
+    "CORRECTO": "Correcto",
+    "INCORRECTO": "Incorrecto",
+    "NIVEL_N": "Nivel {{n}}",
+    "VACIO": "Aún no has respondido ningún ejercicio.",
+    "IR_A_JUGAR": "¡Ir a jugar!"
+  },
+  "PERFIL": {
+    "TITULO": "Mi avatar",
+    "SUBTITULO": "Elige el personaje que te acompaña en la aventura",
+    "MAS_AVATARES": "Consigue más avatares en la",
+    "VER_TIENDA": "Ver tienda",
+    "GUARDADO": "¡Guardado!",
+    "GUARDAR": "Guardar avatar"
+  },
+  "TIENDA": {
+    "SUBTITULO": "Gasta tus monedas en vidas y avatares",
+    "MONEDAS_N": "{{n}} monedas",
+    "COMO_GANAR": "¿Cómo ganar monedas?",
+    "PISTA_1": "Cada respuesta correcta del nivel 1 te da 10 monedas",
+    "PISTA_2": "En el nivel 2 ganas 20 monedas por cada acierto",
+    "PISTA_3": "El nivel 3 es el más difícil, pero da 30 monedas por acierto",
+    "PISTA_4": "Acierta muchas seguidas para juntar monedas más rápido",
+    "PISTA_5": "Cada vida cuesta {{precio}} monedas — ¡cuida tus corazones!",
+    "PISTA_6": "Los avatares más raros cuestan más, ¡ahorra y desbloquéalos!",
+    "RESTABLECER": "Restablecer vidas",
+    "VIDAS_DISPONIBLES": "{{n}}/{{max}} vidas disponibles",
+    "PRECIO": "Precio:",
+    "POR_VIDA": "{{n}} monedas por vida",
+    "VIDAS_COMPLETAS": "Vidas completas",
+    "COMPRAR_VIDA": "Comprar vida",
+    "SIN_MONEDAS": "Sin monedas",
+    "AVATARES": "Avatares",
+    "AVATARES_SUB": "Desbloquea nuevos estilos para tu personaje",
+    "GRATIS": "Gratis",
+    "COMPRAR": "Comprar",
+    "COMPRADO": "Comprado",
+    "EN_USO": "En uso",
+    "USAR": "Usar",
+    "YA_TIENES_AVATAR": "Ya tienes este avatar",
+    "FALTAN_MONEDAS": "Te faltan {{faltan}} monedas",
+    "AVATAR_DESBLOQUEADO": "¡{{nombre}} desbloqueado!",
+    "USANDO": "¡Usando {{nombre}}!",
+    "TODAS_VIDAS": "¡Ya tienes todas las vidas!",
+    "FALTAN_PARA_VIDA": "Te faltan {{faltan}} monedas para una vida",
+    "VIDA_RESTAURADA": "¡Vida restaurada! Te quedan {{n}} vidas"
+  },
+  "AVATARES": {
+    "adventurer": {
+      "NOMBRE": "Aventurero",
+      "DESCRIPCION": "El avatar clásico"
+    },
+    "pixel-art": {
+      "NOMBRE": "Pixel Art",
+      "DESCRIPCION": "Estilo retro pixelado"
+    },
+    "bottts": {
+      "NOMBRE": "Robot",
+      "DESCRIPCION": "Un robot genial"
+    },
+    "fun-emoji": {
+      "NOMBRE": "Emoji Fun",
+      "DESCRIPCION": "Divertido y colorido"
+    },
+    "lorelei": {
+      "NOMBRE": "Lorelei",
+      "DESCRIPCION": "Estilo elegante"
+    },
+    "thumbs": {
+      "NOMBRE": "Thumbs",
+      "DESCRIPCION": "Simpático y amigable"
+    },
+    "micah": {
+      "NOMBRE": "Micah",
+      "DESCRIPCION": "Arte minimalista"
+    },
+    "avataaars": {
+      "NOMBRE": "Avataaars",
+      "DESCRIPCION": "El más popular"
+    }
   }
 }

@@ -3,15 +3,15 @@
   <app-nav></app-nav>
   <main class="mg-main perfil">
     <div class="mg-title">
-      <h1>🎨 Mi avatar</h1>
-      <p>Elige el personaje que te acompaña en la aventura</p>
+      <h1>🎨 {{ 'PERFIL.TITULO' | translate }}</h1>
+      <p>{{ 'PERFIL.SUBTITULO' | translate }}</p>
     </div>
 
     <div class="mg-card actual">
       <img [src]="getAvatarUrl(avatarSeleccionado)" [alt]="nombre" class="grande" />
       <div>
         <h2>{{ nombre }}</h2>
-        <p>Consigue más avatares en la <a routerLink="/tienda">🏪 Tienda</a></p>
+        <p>{{ 'PERFIL.MAS_AVATARES' | translate }} <a routerLink="/tienda">🏪 {{ 'NAV.TIENDA' | translate }}</a></p>
       </div>
     </div>
 
@@ -21,14 +21,14 @@
            [class.bloqueado]="!estaComprado(estilo.id)"
            (click)="seleccionar(estilo.id)">
         <div class="wrap">
-          <img [src]="getAvatarUrl(estilo.id)" [alt]="estilo.nombre" [class.blur]="!estaComprado(estilo.id)" />
+          <img [src]="getAvatarUrl(estilo.id)" [alt]="('AVATARES.' + estilo.id + '.NOMBRE') | translate" [class.blur]="!estaComprado(estilo.id)" />
           <span class="lock" *ngIf="!estaComprado(estilo.id)">🔒</span>
         </div>
-        <strong>{{ estilo.nombre }}</strong>
-        <small *ngIf="!estaComprado(estilo.id)">Ver tienda</small>
+        <strong>{{ ('AVATARES.' + estilo.id + '.NOMBRE') | translate }}</strong>
+        <small *ngIf="!estaComprado(estilo.id)">{{ 'PERFIL.VER_TIENDA' | translate }}</small>
       </div>
     </div>
 
-    <div class="guardar"><button class="mg-btn" (click)="guardar()">{{ guardado ? '✅ ¡Guardado!' : '💾 Guardar avatar' }}</button></div>
+    <div class="guardar"><button class="mg-btn" (click)="guardar()">{{ guardado ? '✅ ' + ('PERFIL.GUARDADO' | translate) : '💾 ' + ('PERFIL.GUARDAR' | translate) }}</button></div>
   </main>
 </div>

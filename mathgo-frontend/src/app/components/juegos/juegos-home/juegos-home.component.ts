@@ -6,10 +6,11 @@ import { AuthService } from '../../../services/auth.service';
 import { NavComponent } from '../../../shared/nav/nav.component';
 import { SceneComponent } from '../../../shared/scene/scene.component';
 
+import { TraducirPipe } from '../../../i18n/i18n.pipes';
 @Component({
   selector: 'app-juegos-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
+  imports: [CommonModule, RouterLink, NavComponent, SceneComponent, TraducirPipe],
   templateUrl: './juegos-home.component.html',
   styleUrls: ['./juegos-home.component.scss'],
 })
@@ -20,14 +21,14 @@ export class JuegosHomeComponent {
     {
       ruta: '/juegos/memorama',
       img: 'assets/img/target.png',
-      nombre: 'Memorama matemático',
-      descripcion: 'Encuentra la pareja entre cada operación y su resultado',
+      nombre: 'juegos.memorama',
+      descripcion: 'juegos.memoramaDesc',
     },
     {
       ruta: '/juegos/carrera',
       img: 'assets/img/pyro.png',
-      nombre: 'Carrera del dragón',
-      descripcion: 'Responde rápido y ayuda a Pyro a llegar a la meta',
+      nombre: 'juegos.carrera',
+      descripcion: 'juegos.carreraDesc',
     },
   ];
 

@@ -4,16 +4,16 @@
 
   <main class="mg-main juegos-home">
     <div class="mg-title">
-      <h1>🎲 Zona de juegos</h1>
-      <p>Elige un juego, {{ nombre }}, y pon a prueba lo que has aprendido</p>
+      <h1>{{ 'juegos.titulo' | t }}</h1>
+      <p>{{ 'juegos.sub' | t:{ nombre: nombre } }}</p>
     </div>
 
     <div class="juegos-grid">
       <a *ngFor="let j of juegos" [routerLink]="j.ruta" class="mg-card juego-card">
-        <img [src]="j.img" [alt]="j.nombre" class="juego-img" />
-        <h2>{{ j.nombre }}</h2>
-        <p>{{ j.descripcion }}</p>
-        <span class="mg-btn">▶ Jugar</span>
+        <img [src]="j.img" [alt]="j.nombre | t" class="juego-img" />
+        <h2>{{ j.nombre | t }}</h2>
+        <p>{{ j.descripcion | t }}</p>
+        <span class="mg-btn">{{ 'juegos.jugar' | t }}</span>
       </a>
     </div>
   </main>

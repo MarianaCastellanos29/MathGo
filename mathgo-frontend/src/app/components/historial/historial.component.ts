@@ -8,10 +8,11 @@ import { AuthService } from '../../services/auth.service';
 import { NavComponent } from '../../shared/nav/nav.component';
 import { SceneComponent } from '../../shared/scene/scene.component';
 
+import { TraducirPipe, FechaLocalPipe } from '../../i18n/i18n.pipes';
 @Component({
   selector: 'app-historial',
   standalone: true,
-  imports: [CommonModule, RouterLink, NavComponent, SceneComponent],
+  imports: [CommonModule, RouterLink, NavComponent, SceneComponent, TraducirPipe, FechaLocalPipe],
   templateUrl: './historial.component.html',
   styleUrls: ['./historial.component.scss']
 })

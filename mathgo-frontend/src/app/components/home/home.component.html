@@ -5,9 +5,9 @@
   <main class="mg-main">
     <section class="hero">
       <div class="saludo">
-        <h1>{{ 'HOME.HOLA' | translate }} <em>{{ nombre }}</em>!</h1>
-        <p class="pregunta">{{ 'HOME.LISTO' | translate }} 🔥</p>
-        <div class="mg-card frase">{{ 'HOME.FRASE' | translate }} ✨</div>
+        <h1>{{ 'home.hola' | t }}, <em>{{ nombre }}</em>!</h1>
+        <p class="pregunta">{{ 'home.listo' | t }}</p>
+        <div class="mg-card frase">{{ 'home.frase' | t }}</div>
       </div>
 
       <div class="mascota" aria-hidden="true">
@@ -21,21 +21,21 @@
 
       <aside class="paneles">
         <a routerLink="/progreso" class="mg-card panel progreso-card">
-          <h2>📊 {{ 'HOME.PROGRESO_GENERAL' | translate }} <span class="flecha">›</span></h2>
+          <h2>{{ 'home.progresoGeneral' | t }} <span class="flecha">›</span></h2>
           <div class="progreso-fila">
             <div class="anillo" [style.--p]="progresoGeneral + '%'"><b>{{ progresoGeneral }}%</b></div>
             <div class="progreso-txt">
-              <strong>{{ 'HOME.NIVEL_N' | translate:{ n: nivelActual } }}</strong>
-              <small>{{ claveMensajeProgreso | translate }}</small>
+              <strong>{{ 'home.nivel' | t:{ n: nivelActual } }}</strong>
+              <small>{{ mensajeProgreso | t }}</small>
               <div class="mg-bar"><i [style.width.%]="progresoGeneral"></i></div>
             </div>
           </div>
         </a>
         <div class="mg-card panel">
-          <h2><app-hearts [vidas]="1" [max]="1"></app-hearts> {{ 'HOME.TUS_VIDAS' | translate }}</h2>
+          <h2><app-hearts [vidas]="1" [max]="1"></app-hearts> {{ 'home.vidas' | t }}</h2>
           <div class="vidas-fila">
             <app-hearts class="vidas-grandes" [vidas]="vidas"></app-hearts>
-            <a routerLink="/tienda" class="mg-pill recargar">↻ {{ 'HOME.RECARGAR_VIDAS' | translate }}</a>
+            <a routerLink="/tienda" class="mg-pill recargar">{{ 'home.recargar' | t }}</a>
           </div>
         </div>
       </aside>
@@ -43,24 +43,18 @@
 
     <section class="niveles">
       <div class="grado-chip" *ngIf="grado">
-        <span class="mg-pill">🎒 {{ claveGrado | translate }}</span>
-        <button class="mg-pill cambiar" (click)="cambiarGrado()">↻ {{ 'HOME.CAMBIAR_GRADO' | translate }}</button>
+        <span class="mg-pill">🎒 {{ ('grado.' + grado) | t }}</span>
+        <button class="mg-pill cambiar" (click)="cambiarGrado()">{{ 'home.cambiarGrado' | t }}</button>
       </div>
-      <h2>🗺️ {{ 'HOME.TU_AVENTURA' | translate }}</h2>
-      <p class="sub" *ngIf="grado && !gradoCompletado">{{ 'HOME.SUB_NIVELES' | translate:{ grado: (claveGradoEnFrase | translate) } }}</p>
+      <h2>{{ 'home.aventura' | t }}</h2>
+      <p class="sub" *ngIf="grado">{{ 'home.sub' | t:{ grado: (('grado.' + grado) | t | lowercase) } }}</p>
 
-      <div class="mg-card" *ngIf="gradoCompletado" style="max-width: 560px; margin: 12px auto 4px; padding: 16px; text-align: center">
-        <strong>🏆 {{ 'HOME.GRADO_COMPLETADO' | translate:{ grado: (claveGradoEnFrase | translate) } }}</strong>
-        <p style="margin: 6px 0 12px">{{ 'HOME.GRADO_COMPLETADO_TEXTO' | translate }}</p>
-        <button class="mg-btn" (click)="cambiarGrado()">🎒 {{ 'HOME.ELEGIR_OTRO_GRADO' | translate }}</button>
-      </div>
-
-      <div class="mg-loading" *ngIf="cargandoGrado">⏳ {{ 'HOME.PREPARANDO' | translate }}</div>
+      <div class="mg-loading" *ngIf="cargandoGrado">{{ 'home.preparando' | t }}</div>
 
       <div class="mg-card sin-grado" *ngIf="!cargandoGrado && !grado">
         <app-pyro class="sg-pyro" mood="idle"></app-pyro>
-        <p>{{ 'HOME.SIN_GRADO' | translate }}</p>
-        <button class="mg-btn" (click)="cambiarGrado()">🎒 {{ 'HOME.ELEGIR_GRADO' | translate }}</button>
+        <p>{{ 'home.cuentanos' | t }}</p>
+        <button class="mg-btn" (click)="cambiarGrado()">{{ 'home.elegirGrado' | t }}</button>
       </div>
 
       <div class="ruta" *ngIf="!cargandoGrado && grado">
@@ -74,9 +68,7 @@
                   [style.animation-delay.ms]="i * 160"
                   [disabled]="item.estado === 'misterio'"
                   (click)="seleccionarNivel(item)"
-                  [attr.aria-label]="item.estado === 'misterio'
-                    ? ('HOME.NIVEL_POR_DESCUBRIR' | translate)
-                    : (('HOME.NIVEL_N' | translate:{ n: item.nivel.id }) + ': ' + (claveTema(item) | translate))">
+                  [attr.aria-label]="item.estado === 'misterio' ? ('home.sorpresa' | t) : (item.nivel.tema | t)">
 
             <app-pyro *ngIf="item.estado === 'actual'" class="guia" mood="happy"></app-pyro>
             <span class="insignia" *ngIf="item.estado === 'hecho'">✓</span>
@@ -84,30 +76,30 @@
             <ng-container *ngIf="item.estado !== 'misterio'; else secreto">
               <img *ngIf="item.nivel.img" class="emoji-img" [src]="item.nivel.img" alt="" />
               <span class="emoji" *ngIf="!item.nivel.img">{{ item.nivel.emoji }}</span>
-              <small>{{ 'HOME.NIVEL_N' | translate:{ n: item.nivel.id } }}</small>
-              <h3>{{ claveTema(item) | translate }}</h3>
-              <p>{{ claveDescripcion(item) | translate }}</p>
-              <span class="estado">{{ item.estado === 'actual' ? '▶' : '↻' }} {{ (item.estado === 'actual' ? 'HOME.JUGAR' : 'HOME.REPETIR') | translate }}</span>
+              <small>{{ 'home.nivel' | t:{ n: item.nivel.id } }}</small>
+              <h3>{{ item.nivel.tema | t }}</h3>
+              <p>{{ item.nivel.descripcion | t }}</p>
+              <span class="estado">{{ (item.estado === 'actual' ? 'home.jugar' : 'home.repetir') | t }}</span>
             </ng-container>
 
             <ng-template #secreto>
               <span class="emoji candado">🎁</span>
-              <small>{{ 'HOME.NIVEL_N' | translate:{ n: item.nivel.id } }}</small>
-              <h3>{{ 'HOME.SORPRESA' | translate }}</h3>
-              <p>{{ 'HOME.TERMINA_ANTERIOR' | translate }}</p>
+              <small>{{ 'home.nivel' | t:{ n: item.nivel.id } }}</small>
+              <h3>{{ 'home.sorpresa' | t }}</h3>
+              <p>{{ 'home.terminaAnterior' | t }}</p>
             </ng-template>
           </button>
         </ng-container>
       </div>
     </section>
 
-    <nav class="accesos" [attr.aria-label]="'HOME.MAS_SECCIONES' | translate">
-      <a routerLink="/juegos" class="mg-pill">🎲 {{ 'HOME.ACCESOS.JUEGOS' | translate }}</a>
-      <a routerLink="/apoyo" class="mg-pill">📚 {{ 'HOME.ACCESOS.APOYO' | translate }}</a>
-      <a routerLink="/logros" class="mg-pill">🏅 {{ 'HOME.ACCESOS.LOGROS' | translate }}</a>
-      <a routerLink="/historial" class="mg-pill">📋 {{ 'HOME.ACCESOS.HISTORIAL' | translate }}</a>
-      <a routerLink="/tienda" class="mg-pill">🏪 {{ 'HOME.ACCESOS.TIENDA' | translate }}</a>
-      <a routerLink="/padre" class="mg-pill" *ngIf="rol === 'PADRE'">👨‍👩‍👧 {{ 'HOME.ACCESOS.PANEL_PADRE' | translate }}</a>
+    <nav class="accesos" aria-label="Más secciones">
+      <a routerLink="/juegos" class="mg-pill">{{ 'home.juegos' | t }}</a>
+      <a routerLink="/apoyo" class="mg-pill">{{ 'home.apoyo' | t }}</a>
+      <a routerLink="/logros" class="mg-pill">{{ 'home.logros' | t }}</a>
+      <a routerLink="/historial" class="mg-pill">{{ 'home.historial' | t }}</a>
+      <a routerLink="/tienda" class="mg-pill">{{ 'home.tienda' | t }}</a>
+      <a routerLink="/padre" class="mg-pill" *ngIf="rol === 'PADRE'">{{ 'home.padre' | t }}</a>
     </nav>
   </main>
 </div>
